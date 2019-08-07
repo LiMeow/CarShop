@@ -2,12 +2,13 @@ drop schema  public cascade;
 create schema public;
 
 create type transaction_status as enum (
-'application confirmation',
-'test-drive',
-'contract preparation',
-'payment expected',
-'car delivery',
-'rejected'); 
+'APPLICATION_CONFIRMATION',
+'CONFIRMED'
+'TEST_DRIVE',
+'CONTRACT_PREPARATION',
+'PAYMENT_EXPECTED',
+'CAR_DELIVERY',
+'REJECTED'); 
 
 
 CREATE TABLE manager ( 	
