@@ -1,0 +1,15 @@
+.navbar-brand img{
+    width: 60px;
+ }
+
+ .navbar{
+    background-color:#FF8C00;
+ }
+
+.offer-btn {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-color: #FF8C00;
+    color: #FF8C00;
+}
