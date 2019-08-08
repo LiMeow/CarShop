@@ -1,0 +1,3 @@
+jwt:
+  aTokenDuration: 30
+  aLongTokenDuration: 1440
