@@ -5,6 +5,7 @@ import net.thumbtack.internship.carshop.exceptions.ErrorCode;
 import net.thumbtack.internship.carshop.models.Manager;
 import net.thumbtack.internship.carshop.repositories.ManagerRepository;
 import net.thumbtack.internship.carshop.requests.AuthRequest;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,13 @@ public class AuthService {
     }
 
     public Manager signUp(AuthRequest request) {
+
         Manager manager = new Manager(request.getUsername(), passwordEncoder.encode(request.getPassword()));
-        managerRepository.save(manager);
+        try {
+            managerRepository.save(manager);
+        } catch (ConstraintViolationException ex) {
+            throw new CarShopException(ErrorCode.USER_ALREADY_EXISTS, request.getUsername());
+        }
         return manager;
     }
 

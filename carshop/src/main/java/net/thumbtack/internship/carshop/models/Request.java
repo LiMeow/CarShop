@@ -20,6 +20,10 @@ public class Request {
         this.email = email;
     }
 
+    public Request(String name, String phone, String email) {
+        this(0, name, phone, email);
+    }
+
     public int getId() {
         return id;
     }

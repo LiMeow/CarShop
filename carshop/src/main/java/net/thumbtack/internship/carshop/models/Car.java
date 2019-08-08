@@ -26,6 +26,10 @@ public class Car {
         this.available = available;
     }
 
+    public Car(String picture, String model, int price, int production) {
+        this(0, picture, model, price, production, true);
+    }
+
     public int getId() {
         return id;
     }

@@ -29,6 +29,10 @@ public class CarRequest {
         this.manager = manager;
     }
 
+    public CarRequest(Car car, Request request) {
+        this(0, car, request, null);
+    }
+
     public int getId() {
         return id;
     }

@@ -31,6 +31,10 @@ public class Status {
         this.carRequest = carRequest;
     }
 
+    public Status(Timestamp date, TransactionStatus transactionStatus, CarRequest carRequest) {
+        this(0, date, transactionStatus, transactionStatus.getDescription(), carRequest);
+    }
+
     public int getId() {
         return id;
     }
