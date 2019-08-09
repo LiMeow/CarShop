@@ -5,7 +5,7 @@ import net.thumbtack.internship.carshop.exceptions.ErrorCode;
 import net.thumbtack.internship.carshop.models.Car;
 import net.thumbtack.internship.carshop.repositories.CarRepository;
 import net.thumbtack.internship.carshop.requests.CreateCarRequest;
-import net.thumbtack.internship.carshop.requests.UpdateCarRequest;
+import net.thumbtack.internship.carshop.requests.EditCarRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class CarService {
         return car;
     }
 
-    public Car updateCar(UpdateCarRequest request, int carId) {
+    public Car editCar(EditCarRequest request, int carId) {
         Car car = carRepository.findById(carId).orElse(null);
 
         if (car == null)

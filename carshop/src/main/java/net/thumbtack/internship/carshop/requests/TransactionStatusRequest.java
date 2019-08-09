@@ -4,11 +4,12 @@ import net.thumbtack.internship.carshop.models.StatusName;
 
 import javax.validation.constraints.NotNull;
 
-public class AddTransactionStatusRequest {
+public class TransactionStatusRequest {
     @NotNull
     private StatusName statusName;
 
-    public AddTransactionStatusRequest() { }
+    public TransactionStatusRequest() {
+    }
 
     public StatusName getStatusName() {
         return statusName;

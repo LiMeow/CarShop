@@ -7,6 +7,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR("", "'%s'"),
     REQUEST_NOT_FOUND("", "Customer with id '%s' not found."),
     TRANSACTION_NOT_EXISTS("transactionId","Transaction with id '%s' not exists" ),
+    TRANSACTION_STATUS_NOT_EXISTS("transactionStatusId", "Status of transaction with id '%s' not exists"),
     USER_ALREADY_EXISTS("username", "User with username '%s' already exists."),
     USER_NOT_FOUND("username", "User with username '%s' not found."),
     USER_NOT_EXISTS("id", "User with id '%s' not exists."),

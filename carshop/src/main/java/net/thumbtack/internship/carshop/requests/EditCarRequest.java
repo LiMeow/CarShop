@@ -1,13 +1,13 @@
 package net.thumbtack.internship.carshop.requests;
 
-public class UpdateCarRequest {
+public class EditCarRequest {
     private String picture;
     private String model;
     private int price;
     private int production;
     private Boolean available;
 
-    public UpdateCarRequest() {
+    public EditCarRequest() {
     }
 
     public String getPicture() {
