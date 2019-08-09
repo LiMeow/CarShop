@@ -7,14 +7,21 @@ import java.time.Duration;
 
 @Component
 public class JwtSettings {
+    private final String tokenSigningKey;
     private final int aTokenDuration;
     private final int aLongTokenDuration;
 
 
-    public JwtSettings(@Value("${jwt.aTokenDuration}") int aTokenDuration,
+    public JwtSettings(@Value("${jwt.signingKey}") final String tokenSigningKey,
+                       @Value("${jwt.aTokenDuration}") int aTokenDuration,
                        @Value("${jwt.aLongTokenDuration}") int aLongTokenDuration) {
+        this.tokenSigningKey = tokenSigningKey;
         this.aTokenDuration = aTokenDuration;
         this.aLongTokenDuration = aLongTokenDuration;
+    }
+
+    public String getTokenSigningKey() {
+        return tokenSigningKey;
     }
 
     public int getaTokenDuration() {
