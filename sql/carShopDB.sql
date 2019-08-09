@@ -1,7 +1,7 @@
 drop schema  public cascade;
 create schema public;
 
-create type transaction_status as enum (
+create type status as enum (
 'APPLICATION_CONFIRMATION',
 'CONFIRMED'
 'TEST_DRIVE',
@@ -26,26 +26,26 @@ CREATE TABLE manager (
  available boolean not null default true
  );
 
-CREATE TABLE request ( 	
+CREATE TABLE customer ( 	
 	id serial primary key,
 	name text not null,
 	phone text default null,
 	email text default null
 );
 
-CREATE TABLE car_request ( 	
+CREATE TABLE transaction ( 	
 	id serial primary key,
 	car_id integer not null REFERENCES car (id),
-	request_id integer not null REFERENCES request (id),
+	customer_id integer not null REFERENCES customer (id),
     manager_id integer default null REFERENCES manager (id)
 );
 
-CREATE TABLE status( 	
+CREATE TABLE transaction_status( 	
 	id serial primary key,
 	date timestamptz not null default now(),
-	status_name transaction_status not null,
+	status_name status not null,
 	description text default null,
-	car_request_id integer not null REFERENCES car_request (id)
+	transaction_id integer not null REFERENCES transaction (id)
 );
 
 

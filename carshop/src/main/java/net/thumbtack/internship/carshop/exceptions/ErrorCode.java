@@ -4,8 +4,9 @@ public enum ErrorCode {
 
     CAR_NOT_EXISTS("", "Car with id '%s' not exists."),
     EMPTY_REQUEST_BODY("json", "Empty request body."),
-    REQUEST_NOT_FOUND("", "Request with id '%s' not found."),
     INTERNAL_SERVER_ERROR("", "'%s'"),
+    REQUEST_NOT_FOUND("", "Customer with id '%s' not found."),
+    TRANSACTION_NOT_EXISTS("transactionId","Transaction with id '%s' not exists" ),
     USER_ALREADY_EXISTS("username", "User with username '%s' already exists."),
     USER_NOT_FOUND("username", "User with username '%s' not found."),
     USER_NOT_EXISTS("id", "User with id '%s' not exists."),

@@ -4,8 +4,8 @@ package net.thumbtack.internship.carshop.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="car_request")
-public class CarRequest {
+@Table(name="transaction")
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,22 +15,22 @@ public class CarRequest {
     private Car car;
 
     @OneToOne
-    @JoinColumn(name="request_id")
-    private Request request;
+    @JoinColumn(name="customer_id")
+    private Customer customer;
 
     @OneToOne
     @JoinColumn(name="manager_id")
     private Manager manager;
 
-    public CarRequest(int id, Car car, Request request, Manager manager) {
+    public Transaction(int id, Car car, Customer customer, Manager manager) {
         this.id = id;
         this.car = car;
-        this.request = request;
+        this.customer = customer;
         this.manager = manager;
     }
 
-    public CarRequest(Car car, Request request) {
-        this(0, car, request, null);
+    public Transaction(Car car, Customer customer) {
+        this(0, car, customer, null);
     }
 
     public int getId() {
@@ -49,12 +49,12 @@ public class CarRequest {
         this.car = car;
     }
 
-    public Request getRequest() {
-        return request;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setRequest(Request request) {
-        this.request = request;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Manager getManager() {
