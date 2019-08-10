@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/requests")
+@RequestMapping("/offers")
 public class CustomerController {
     private final CustomerService customerService;
 

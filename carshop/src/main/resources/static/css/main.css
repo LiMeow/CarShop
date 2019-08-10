@@ -18,11 +18,36 @@
     background-color: #FF8C00;
 }
 
-.form-auth{
-      margin: 0;
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      margin-right: -50%;
-      transform: translate(-50%, -50%)
+.sign-btn:hover {
+    background-color: #FFA500;
+}
+
+.form-auth {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.card img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.check-btn{
+     border-color: #FF8C00;
+}
+.check-btn.active {
+     background-color: #FF8C00;
+}
+
+.check-btn:hover {
+     background-color: #FF8C00;
+}
+
+.back-btn:hover {
+    border-color: #FF8C00;
 }
