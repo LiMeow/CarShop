@@ -55,6 +55,23 @@
     border-color: #FF8C00;
 }
 
-.user{
+.dropdown-btn{
+     outline: 0!important;
+     outline-color: transparent!important;
+     outline-width: 0!important;
+     outline-style: none!important;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0)!important;
+     background-color: #FF8C00;
+     color:#FFFFFF;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus{
+      color:#FFFFFF;
+}
+
+.dropdown-btn-item:hover,
+.dropdown-btn-item:focus{
     color:#FFFFFF;
+    background-color: #FF8C00;
 }

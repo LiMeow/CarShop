@@ -15,13 +15,25 @@
                 <img th:src="@{/img/UI/logo.png}">
                 <strong>CarShop</strong>
             </a>
-            <div class="user" sec:authorize="isAuthenticated()">
-                <img th:src="@{/img/UI/user.png}" width="35" height="35">
-                <span sec:authentication="principal"/>
+
+            <div sec:authorize="isAuthenticated()">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle dropdown-btn"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img th:src="@{/img/UI/user.png}" width="35" height="35">
+                        <span sec:authentication="principal"/>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item dropdown-btn-item" th:href="@{/signin}" href="#">SignIn with another
+                            account</a>
+                        <a class="dropdown-item dropdown-btn-item" href="#">View statistics</a>
+                    </div>
+                </div>
             </div>
             <div sec:authorize="!isAuthenticated()">
                 <a th:href="@{/signin}" class="btn btn-outline-light" href="#">Sign In</a>
             </div>
+
         </div>
     </div>
 </header>
@@ -45,5 +57,11 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
 </body>
 </html>
