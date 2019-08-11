@@ -27,10 +27,7 @@ public class CarService {
     }
 
     public Car updateCar(UpdateCarRequest request, int carId) {
-        Car car = carRepository.findById(carId).orElse(null);
-
-        if (car == null)
-            throw new CarShopException(ErrorCode.CAR_NOT_EXISTS, String.valueOf(carId));
+        Car car = findCarById(carId);
 
         if (request.getPicture() != null && !request.getPicture().isEmpty())
             car.setPicture(request.getPicture());
@@ -51,15 +48,25 @@ public class CarService {
         return car;
     }
 
+    public Car getCar(int carId) {
+        return findCarById(carId);
+    }
+
     public List<Car> getCars() {
         return (List<Car>) carRepository.findAll();
     }
 
     public void deleteCar(int carId) {
-        if (!carRepository.findById(carId).isPresent())
+        findCarById(carId);
+        carRepository.deleteById(carId);
+    }
+
+    private Car findCarById(int carId) {
+        Car car = carRepository.findById(carId).orElse(null);
+        if (car == null)
             throw new CarShopException(ErrorCode.CAR_NOT_EXISTS, String.valueOf(carId));
 
-        carRepository.deleteById(carId);
+        return car;
     }
 
 }
