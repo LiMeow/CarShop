@@ -56,6 +56,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/**").permitAll()
                 .and()
+                .authorizeRequests().antMatchers(
+                "/v2/api-docs",
+                "/configuration/**",
+                "/swagger*/**",
+                "/webjars/**").permitAll()
+                .and()
                 .authorizeRequests().anyRequest().authenticated();
     }
 
