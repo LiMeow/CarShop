@@ -1,14 +1,14 @@
 drop schema  public cascade;
 create schema public;
 
-create type status as enum (
+/*create type status as enum (
 'APPLICATION_CONFIRMATION',
 'CONFIRMED'
 'TEST_DRIVE',
 'CONTRACT_PREPARATION',
 'PAYMENT_EXPECTED',
 'CAR_DELIVERY',
-'REJECTED'); 
+'REJECTED'); */
 
 
 CREATE TABLE manager ( 	
@@ -43,7 +43,7 @@ CREATE TABLE transaction (
 CREATE TABLE transaction_status( 	
 	id serial primary key,
 	date timestamptz not null default now(),
-	status_name status not null,
+	status_name text not null,
 	description text default null,
 	transaction_id integer not null REFERENCES transaction (id)
 );
