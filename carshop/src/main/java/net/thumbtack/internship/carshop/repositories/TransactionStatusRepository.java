@@ -22,5 +22,4 @@ public interface TransactionStatusRepository extends CrudRepository<TransactionS
     @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.id = :transactionId")
     List<TransactionStatus> findAllByTransactionId(@Param("transactionId") int transactionId,
                                                    Sort sort);
-
 }

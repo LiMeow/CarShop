@@ -4,11 +4,13 @@ import net.thumbtack.internship.carshop.models.StatusName;
 import net.thumbtack.internship.carshop.models.TransactionStatus;
 import net.thumbtack.internship.carshop.requests.AddTransactionStatusRequest;
 import net.thumbtack.internship.carshop.responses.TransactionInfo;
+import net.thumbtack.internship.carshop.services.ChartService;
 import net.thumbtack.internship.carshop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +18,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TransactionViewController {
     private final TransactionService transactionService;
+    private final ChartService chartService;
 
     @Autowired
-    public TransactionViewController(TransactionService transactionService) {
+    public TransactionViewController(TransactionService transactionService, ChartService chartService) {
         this.transactionService = transactionService;
+        this.chartService = chartService;
     }
 
     @GetMapping("/free-transactions")
@@ -103,5 +108,11 @@ public class TransactionViewController {
         return "redirect:/transaction-story/" + transactionId;
     }
 
+    @GetMapping("/chart")
+    public String getChart(ModelMap modelMap) {
+        List<List<Map<Object, Object>>> chartData = chartService.getChartData();
+        modelMap.addAttribute("dataPointsList", chartData);
+        return "statistic";
+    }
 
 }
