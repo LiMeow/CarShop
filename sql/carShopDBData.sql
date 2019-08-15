@@ -23,8 +23,11 @@ insert into transaction (car_id,customer_id,manager_id) values (6,2,1);
 
 
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 5);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 5);
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-25 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 6);
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-05 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 7);
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 8);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-21 20:38:40' , 'CONFIRMED', 'Application confirmed', 8);
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-10 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 9);
 insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-12 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 10);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 10);

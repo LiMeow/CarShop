@@ -3,6 +3,7 @@ package net.thumbtack.internship.carshop.controllers;
 import net.thumbtack.internship.carshop.models.StatusName;
 import net.thumbtack.internship.carshop.models.TransactionStatus;
 import net.thumbtack.internship.carshop.requests.AddTransactionStatusRequest;
+import net.thumbtack.internship.carshop.responses.ChartItem;
 import net.thumbtack.internship.carshop.responses.TransactionInfo;
 import net.thumbtack.internship.carshop.services.ChartService;
 import net.thumbtack.internship.carshop.services.TransactionService;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class TransactionViewController {
@@ -108,11 +108,15 @@ public class TransactionViewController {
         return "redirect:/transaction-story/" + transactionId;
     }
 
-    @GetMapping("/chart")
+    @GetMapping("/transaction-statistics")
     public String getChart(ModelMap modelMap) {
-        List<List<Map<Object, Object>>> chartData = chartService.getChartData();
-        modelMap.addAttribute("dataPointsList", chartData);
-        return "statistic";
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<ChartItem> applicationСonfirmationData = chartService.getChartData(username, StatusName.APPLICATION_CONFIRMATION);
+        List<ChartItem> confirmedData = chartService.getChartData(username, StatusName.CONFIRMED);
+
+        modelMap.addAttribute("chartItems1", applicationСonfirmationData);
+        modelMap.addAttribute("chartItems2", confirmedData);
+        return "transactionsStatistics";
     }
 
 }
