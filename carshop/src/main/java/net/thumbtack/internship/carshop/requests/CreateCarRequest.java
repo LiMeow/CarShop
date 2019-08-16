@@ -14,6 +14,13 @@ public class CreateCarRequest {
 
     public CreateCarRequest() {}
 
+    public CreateCarRequest(@NotNull String picture, @NotNull String model, @NotNull int price, @NotNull int production) {
+        this.picture = picture;
+        this.model = model;
+        this.price = price;
+        this.production = production;
+    }
+
     public String getPicture() {
         return picture;
     }

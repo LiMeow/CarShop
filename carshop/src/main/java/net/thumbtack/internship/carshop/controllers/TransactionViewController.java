@@ -33,9 +33,10 @@ public class TransactionViewController {
 
     @GetMapping("/free-transactions")
     public String freeTrannsactionsPage(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
 
-        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(0, 8);
+        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(username, 0, 8);
         List<TransactionInfo> transactions = new ArrayList<>();
 
         for (TransactionStatus transactionStatus : transactionStatuses) {

@@ -53,16 +53,20 @@ public class TransactionService {
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public List<TransactionStatus> getAllFreeTransactions(int page, int size) {
+    public List<TransactionStatus> getAllFreeTransactions(String username, int page, int size) {
+        findManagerByUsername(username);
         Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
         return transactionStatusRepository.findAllFree(pageable);
     }
 
+    /*REFACTOR IT*/
     public List<TransactionStatus> getAllTransactionByManager(String username, int page, int size) {
         Manager manager = findManagerByUsername(username);
         Pageable pageable = PageRequest.of(0, 1);
+
         List<Transaction> transactions = transactionRepository.findAllByManager(manager.getId());
         List<TransactionStatus> transactionStatuses = new ArrayList<>();
+
         for (Transaction transaction : transactions) {
             transactionStatuses.add(transactionStatusRepository.findLastTransactionStatus(transaction.getId(), pageable).get(0));
         }

@@ -10,6 +10,14 @@ public class UpdateCarRequest {
     public UpdateCarRequest() {
     }
 
+    public UpdateCarRequest(String picture, String model, int price, int production, Boolean available) {
+        this.picture = picture;
+        this.model = model;
+        this.price = price;
+        this.production = production;
+        this.available = available;
+    }
+
     public String getPicture() {
         return picture;
     }

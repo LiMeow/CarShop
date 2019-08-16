@@ -16,12 +16,13 @@ public class TransactionsController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping(path = "/transactions/free",
+    @GetMapping(path = "/{username}/transactions/free",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllFreeTransactions(@RequestParam(required = false, defaultValue = "0") int page,
+    public ResponseEntity<?> getAllFreeTransactions(@PathVariable("username") String username,
+                                                    @RequestParam(required = false, defaultValue = "0") int page,
                                                     @RequestParam(required = false, defaultValue = "8") int size) {
-        return ResponseEntity.ok().body(transactionService.getAllFreeTransactions(page, size));
+        return ResponseEntity.ok().body(transactionService.getAllFreeTransactions(username, page, size));
     }
 
     @PutMapping(value = "/{username}/transactions/free/{id}",
