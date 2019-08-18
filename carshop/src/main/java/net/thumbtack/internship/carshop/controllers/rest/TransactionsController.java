@@ -36,11 +36,9 @@ public class TransactionsController {
     @GetMapping(value = "/{username}/transactions",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllTransactionByManager(@PathVariable("username") String username,
-                                                        @RequestParam(required = false, defaultValue = "0") int page,
-                                                        @RequestParam(required = false, defaultValue = "8") int size) {
+    public ResponseEntity<?> getAllTransactionByManager(@PathVariable("username") String username) {
 
-        return ResponseEntity.ok().body(transactionService.getAllTransactionByManager(username, page, size));
+        return ResponseEntity.ok().body(transactionService.getAllTransactionByManager(username));
     }
 
     @PostMapping(value = "/{username}/transactions/{id}",

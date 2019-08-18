@@ -59,6 +59,7 @@ public class CarService {
 
     private Car findCarById(int carId) {
         Car car = carRepository.findById(carId).orElse(null);
+
         if (car == null)
             throw new CarShopException(ErrorCode.CAR_NOT_EXISTS, String.valueOf(carId));
 

@@ -24,6 +24,7 @@ public class AuthService {
 
     public Manager signUp(AuthRequest request) {
         Manager manager = new Manager(request.getUsername(), passwordEncoder.encode(request.getPassword()));
+
         try {
             managerRepository.save(manager);
         } catch (ConstraintViolationException ex) {

@@ -1,3 +1,4 @@
+
 insert into car (model,picture, price, production,available) values ('Audi A8','/img/cars/AudiA8.jpg',6150000,2017,true);
 insert into car (model,picture, price, production,available) values ('AlfaRomeo Stelvio','/img/cars/AlfaRomeoStelvio.jpg',3900000 ,2019,true);
 insert into car (model,picture, price, production,available) values ('BMW i8','/img/cars/BMWi8.jpg',11490000,2017,true);
@@ -14,20 +15,21 @@ insert into customer (name,phone) values ('Mia','234');
 insert into customer (name,phone) values ('Moris','090');
 insert into customer (name,phone) values ('Milena','129');
 
-insert into transaction (car_id,customer_id,manager_id) values (1,5,1);
-insert into transaction (car_id,customer_id,manager_id) values (2,6,1);
-insert into transaction (car_id,customer_id,manager_id) values (3,7,1);
-insert into transaction (car_id,customer_id,manager_id) values (4,8,1);
-insert into transaction (car_id,customer_id,manager_id) values (5,1,1);
-insert into transaction (car_id,customer_id,manager_id) values (6,2,1);
+insert into transaction (car_id,customer_id,manager_id) values (1,1,1);
+insert into transaction (car_id,customer_id,manager_id) values (2,2,1);
+insert into transaction (car_id,customer_id,manager_id) values (3,3,1);
+insert into transaction (car_id,customer_id,manager_id) values (4,4,1);
+insert into transaction (car_id,customer_id,manager_id) values (5,5,1);
+insert into transaction (car_id,customer_id,manager_id) values (6,6,1);
 
 
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 5);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 5);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-25 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 6);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-05 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 7);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 8);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-21 20:38:40' , 'CONFIRMED', 'Application confirmed', 8);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-10 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 9);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-12 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 10);
-insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 10);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 1);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 1);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-05-25 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 2);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-05 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 3);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-15 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 4);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-21 20:38:40' , 'CONFIRMED', 'Application confirmed', 4);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-06-10 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 5);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-12 20:38:40' , 'APPLICATION_CONFIRMATION', 'Pending application confirmation', 6);
+insert into transaction_status (date, status_name, description, transaction_id) values (timestamp '2019-07-19 20:38:40' , 'CONFIRMED', 'Application confirmed', 6);
+

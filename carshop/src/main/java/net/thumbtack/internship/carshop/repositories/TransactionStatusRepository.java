@@ -15,8 +15,17 @@ public interface TransactionStatusRepository extends CrudRepository<TransactionS
     @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.manager=null")
     List<TransactionStatus> findAllFree(Pageable pageable);
 
-    @Query(value = "SELECT t FROM TransactionStatus t WHERE t.transaction.id= :transactionId ORDER BY  t.date DESC ")
-    List<TransactionStatus> findLastTransactionStatus(@Param("transactionId") int transactionId, Pageable pageable);
+    @Query(value = "SELECT t1.* FROM transaction_status t1 " +
+            "JOIN (SELECT transaction_id, max(date) " +
+            "FROM transaction_status " +
+            "JOIN transaction " +
+            "ON transaction_status.transaction_id = transaction.id " +
+            "WHERE transaction.manager_id = :managerId " +
+            "GROUP BY transaction_id ) t2 " +
+            "ON t1.transaction_id = t2.transaction_id " +
+            "AND t1.date=t2.max " +
+            "ORDER BY t1.date DESC", nativeQuery = true)
+    List<TransactionStatus> findAllLastTransactionsStatusesByManager(@Param("managerId") int managerId);
 
 
     @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.id = :transactionId")

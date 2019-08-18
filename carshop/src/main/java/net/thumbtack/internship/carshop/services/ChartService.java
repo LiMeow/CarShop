@@ -28,13 +28,13 @@ public class ChartService {
 
     public List<ChartItem> getChartData(String username, StatusName statusName) {
         Manager manager = findManagerByUsername(username);
-        List<ChartItem> chartItems = chartRepository.findChartItems(manager.getId(), statusName);
 
-        return chartItems;
+        return chartRepository.findChartItems(manager.getId(), statusName);
     }
 
     private Manager findManagerByUsername(String username) {
         Manager manager = managerRepository.findByUsername(username);
+
         if (manager == null)
             throw new CarShopException(ErrorCode.USER_NOT_EXISTS, username);
 
