@@ -2,8 +2,6 @@ package net.thumbtack.internship.carshop.jwt;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-import javax.servlet.http.Cookie;
-
 public class JwtToken extends AbstractAuthenticationToken {
     private final String token;
 
