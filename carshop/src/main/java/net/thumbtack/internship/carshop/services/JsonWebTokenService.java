@@ -10,6 +10,8 @@ import net.thumbtack.internship.carshop.jwt.AuthenticatedJwtToken;
 import net.thumbtack.internship.carshop.jwt.JwtTokenService;
 import net.thumbtack.internship.carshop.models.Manager;
 import net.thumbtack.internship.carshop.requests.AuthRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ import java.util.Date;
 @Service
 public class JsonWebTokenService implements JwtTokenService {
     private JwtSettings jwtSettings;
-
+    private final Logger LOGGER = LoggerFactory.getLogger(JsonWebTokenService.class);
 
     public JsonWebTokenService(JwtSettings jwtSettings) {
         this.jwtSettings = jwtSettings;
@@ -29,6 +31,8 @@ public class JsonWebTokenService implements JwtTokenService {
 
     @Override
     public Authentication parseToken(String token) {
+        LOGGER.debug("JsonWebTokenService parse token '{}'", token);
+
         Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSettings.getTokenSigningKey()).parseClaimsJws(token);
         String subject = claims.getBody().getSubject();
         return new AuthenticatedJwtToken(subject, new ArrayList<>());
@@ -36,6 +40,8 @@ public class JsonWebTokenService implements JwtTokenService {
 
     @Override
     public String createToken(Manager manager) {
+        LOGGER.debug("JsonWebTokenService create token for manager '{}'", manager);
+
         Instant now = Instant.now();
 
         Claims claims = Jwts.claims()
@@ -51,6 +57,8 @@ public class JsonWebTokenService implements JwtTokenService {
 
     @Override
     public String createToken(AuthRequest request) {
+        LOGGER.debug("JsonWebTokenService create token by request '{}'", request);
+
         Instant now = Instant.now();
         Gson gson = new Gson();
         Claims claims = Jwts.claims()
@@ -76,6 +84,8 @@ public class JsonWebTokenService implements JwtTokenService {
 
     @Override
     public String getDataFromToken(String token) {
+        LOGGER.debug("JsonWebTokenService get data from token '{}'", token);
+
         Date now = Date.from(Instant.now());
         Jws<Claims> claims = Jwts.parser()
                 .setSigningKey(jwtSettings.getTokenSigningKey())

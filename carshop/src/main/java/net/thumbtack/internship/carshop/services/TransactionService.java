@@ -10,6 +10,8 @@ import net.thumbtack.internship.carshop.repositories.TransactionRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionStatusRepository;
 import net.thumbtack.internship.carshop.requests.AddTransactionStatusRequest;
 import net.thumbtack.internship.carshop.responses.TransactionInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ public class TransactionService {
     private final ManagerRepository managerRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionStatusRepository transactionStatusRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
     @Autowired
     public TransactionService(ManagerRepository managerRepository,
@@ -36,6 +39,8 @@ public class TransactionService {
     }
 
     public Transaction pickUpTransaction(String username, int transactionId) {
+        LOGGER.debug("TransactionService pick up transaction with id '{}' by manager with username '{}'", transactionId, username);
+
         Manager manager = findManagerByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
 
@@ -46,6 +51,8 @@ public class TransactionService {
     }
 
     public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, String username, int transactionId) {
+        LOGGER.debug("TransactionService  add status '{}' to transaction with id '{}' by manager with username '{}'", request.getStatusName(), transactionId, username);
+
         findManagerByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
 
@@ -56,6 +63,8 @@ public class TransactionService {
     }
 
     public List<TransactionStatus> getAllFreeTransactions(String username, int page, int size) {
+        LOGGER.debug("TransactionService get all free transactions by manager with username '{}'", username);
+
         findManagerByUsername(username);
         Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
 
@@ -63,11 +72,14 @@ public class TransactionService {
     }
 
     public List<TransactionStatus> getAllTransactionByManager(String username) {
+        LOGGER.debug("TransactionService get all transactions by manager with username '{}'", username);
+
         Manager manager = findManagerByUsername(username);
         return transactionStatusRepository.findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
     public List<TransactionStatus> getTransactionStatuses(String username, int transactionId) {
+        LOGGER.debug("TransactionService get statuses of transaction with id '{}' by manager with username '{}'", transactionId, username);
         findManagerByUsername(username);
         findTransactionById(transactionId);
 
@@ -92,8 +104,10 @@ public class TransactionService {
 
     private Manager findManagerByUsername(String username) {
         Manager manager = managerRepository.findByUsername(username);
-        if (manager == null)
+        if (manager == null) {
+            LOGGER.error("Unable to find manager with username '{}'", username);
             throw new CarShopException(ErrorCode.USER_NOT_EXISTS, username);
+        }
 
         return manager;
     }
@@ -101,8 +115,10 @@ public class TransactionService {
     private Transaction findTransactionById(int transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
 
-        if (transaction == null)
+        if (transaction == null) {
+            LOGGER.error("Unable to find transaction with id '{}'", transactionId);
             throw new CarShopException(ErrorCode.TRANSACTION_NOT_EXISTS, String.valueOf(transactionId));
+        }
 
         return transaction;
     }
