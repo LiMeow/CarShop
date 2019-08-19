@@ -29,11 +29,6 @@ public class CustomerViewController {
         return "customer";
     }
 
-    @GetMapping("/back")
-    public String backHome() {
-        return "redirect:/";
-    }
-
     @PostMapping("/create/transaction/{id}")
     public String addCustomerContacts(@ModelAttribute("request") CustomerRequest request,
                                       @PathVariable("id") int carId,
