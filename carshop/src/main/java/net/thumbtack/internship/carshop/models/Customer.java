@@ -4,8 +4,8 @@ package net.thumbtack.internship.carshop.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="request")
-public class Request {
+@Table(name="customer")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -13,11 +13,15 @@ public class Request {
     private String phone;
     private String email;
 
-    public Request(int id, String name, String phone, String email) {
+    public Customer(int id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Customer(String name, String phone, String email) {
+        this(0, name, phone, email);
     }
 
     public int getId() {

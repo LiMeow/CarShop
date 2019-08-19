@@ -3,8 +3,8 @@
 <head>
     <title>CarShop</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="../static/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
-    <link href="../static/main.css" rel="stylesheet" th:href="@{/main.css}"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 <header>
@@ -14,7 +14,7 @@
                 <img th:src="@{/img/logo.png}">
                 <strong>CarShop</strong>
             </a>
-            <a class="btn btn-outline-light" href="#">Sign up</a>
+            <a th:href="@{/signin}" class="btn btn-outline-light" href="#">Sign In</a>
         </div>
     </div>
 </header>
