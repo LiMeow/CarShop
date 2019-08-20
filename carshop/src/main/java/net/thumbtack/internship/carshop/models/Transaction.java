@@ -22,6 +22,9 @@ public class Transaction {
     @JoinColumn(name="manager_id")
     private Manager manager;
 
+    public Transaction() {
+    }
+
     public Transaction(int id, Car car, Customer customer, Manager manager) {
         this.id = id;
         this.car = car;

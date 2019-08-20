@@ -38,13 +38,9 @@ public class CustomerViewController {
     public String addCustomerContacts(@PathVariable("id") int carId,
                                       @ModelAttribute("request") CustomerRequest request,
                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
             return "redirect:/offer/{id}";
-        }
-
         customerService.createTransaction(request, carId);
-        System.out.println(request.getName());
-
         return "redirect:/";
     }
 }

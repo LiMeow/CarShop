@@ -12,13 +12,14 @@ import java.util.List;
 
 @Repository
 public interface TransactionStatusRepository extends CrudRepository<TransactionStatus, Integer> {
+    @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.manager=null")
+    List<TransactionStatus> findAllFree(Pageable pageable);
 
-    @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.manager.id = :userId GROUP BY t.transaction.id")
-    List<TransactionStatus> findAllByManager(@Param("userId") int userId,
-                                             Pageable pageable);
+    @Query(value = "SELECT t FROM TransactionStatus t WHERE t.transaction.id= :transactionId ORDER BY  t.date DESC ")
+    List<TransactionStatus> findLastTransactionStatus(@Param("transactionId") int transactionId, Pageable pageable);
+
 
     @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.id = :transactionId")
     List<TransactionStatus> findAllByTransactionId(@Param("transactionId") int transactionId,
                                                    Sort sort);
-
 }

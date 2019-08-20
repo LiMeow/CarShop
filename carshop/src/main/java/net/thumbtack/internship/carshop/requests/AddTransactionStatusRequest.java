@@ -10,6 +10,10 @@ public class AddTransactionStatusRequest {
 
     public AddTransactionStatusRequest() { }
 
+    public AddTransactionStatusRequest(@NotNull StatusName statusName) {
+        this.statusName = statusName;
+    }
+
     public StatusName getStatusName() {
         return statusName;
     }

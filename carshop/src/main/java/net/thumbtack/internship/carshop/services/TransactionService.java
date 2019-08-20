@@ -3,10 +3,8 @@ package net.thumbtack.internship.carshop.services;
 import net.thumbtack.internship.carshop.exceptions.CarShopException;
 import net.thumbtack.internship.carshop.exceptions.ErrorCode;
 import net.thumbtack.internship.carshop.models.Manager;
-import net.thumbtack.internship.carshop.models.StatusName;
 import net.thumbtack.internship.carshop.models.Transaction;
 import net.thumbtack.internship.carshop.models.TransactionStatus;
-import net.thumbtack.internship.carshop.repositories.CustomerRepository;
 import net.thumbtack.internship.carshop.repositories.ManagerRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionStatusRepository;
@@ -17,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,21 +33,18 @@ public class TransactionService {
         this.transactionStatusRepository = transactionStatusRepository;
     }
 
-    public TransactionStatus pickUpTransaction(int managerId, int transactionId) {
-        Manager manager = findManagerById(managerId);
+    public Transaction pickUpTransaction(String username, int transactionId) {
+        Manager manager = findManagerByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
 
         transaction.setManager(manager);
         transactionRepository.save(transaction);
 
-        TransactionStatus transactionStatus = new TransactionStatus(StatusName.APPLICATION_CONFIRMATION, transaction);
-        transactionStatusRepository.save(transactionStatus);
-
-        return transactionStatus;
+        return transaction;
     }
 
-    public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, int userId, int transactionId) {
-        findManagerById(userId);
+    public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, String username, int transactionId) {
+        findManagerByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
 
         TransactionStatus status = new TransactionStatus(request.getStatusName(), transaction);
@@ -57,22 +53,25 @@ public class TransactionService {
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public List<Transaction> getAllFreeTransactions(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return transactionRepository.findAllFree(pageable);
-    }
-
-    public List<TransactionStatus> getAllTransactionByManager(int userId, int page, int size) {
-        findManagerById(userId);
-
+    public List<TransactionStatus> getAllFreeTransactions(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
-        return transactionStatusRepository.findAllByManager(userId, pageable);
+        return transactionStatusRepository.findAllFree(pageable);
     }
 
-    public List<TransactionStatus> getTransactionStatuses(int userId, int transactionId) {
-        findManagerById(userId);
-        findTransactionById(transactionId);
+    public List<TransactionStatus> getAllTransactionByManager(String username, int page, int size) {
+        Manager manager = findManagerByUsername(username);
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Transaction> transactions = transactionRepository.findAllByManager(manager.getId());
+        List<TransactionStatus> transactionStatuses = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            transactionStatuses.add(transactionStatusRepository.findLastTransactionStatus(transaction.getId(), pageable).get(0));
+        }
+        return transactionStatuses;
+    }
 
+    public List<TransactionStatus> getTransactionStatuses(String username, int transactionId) {
+        findManagerByUsername(username);
+        findTransactionById(transactionId);
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
@@ -85,6 +84,14 @@ public class TransactionService {
         return manager;
     }
 
+    private Manager findManagerByUsername(String username) {
+        Manager manager = managerRepository.findByUsername(username);
+        if (manager == null)
+            throw new CarShopException(ErrorCode.USER_NOT_EXISTS, username);
+
+        return manager;
+    }
+
     private Transaction findTransactionById(int transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
 
@@ -93,4 +100,5 @@ public class TransactionService {
 
         return transaction;
     }
+
 }

@@ -24,6 +24,9 @@ public class TransactionStatus {
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
+    public TransactionStatus() {
+    }
+
     public TransactionStatus(int id, Timestamp date, StatusName statusName, String description, Transaction transaction) {
         this.id = id;
         this.date = date;

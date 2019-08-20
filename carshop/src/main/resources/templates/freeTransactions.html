@@ -7,6 +7,7 @@
     <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
+
 <body>
 <header>
     <div class="navbar navbar-dark shadow-sm">
@@ -39,29 +40,37 @@
     </div>
 </header>
 
+<div class="container my-5" sec:authorize="isAuthenticated()">
 
-<div class="container">
-    <h1 align="center">Cars</h1>
-    <div class="row">
-        <div class="col-xs-8 col-sm-6 col-md-4" th:each="car : ${cars}">
-            <div class="card mb-4 shadow-sm">
-                <img th:src="@{${car.picture}}" class="bd-placeholder-img card-img-top" width=100% height="225">
-                <div class="card-body">
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li th:text="'Model: ' + ${car.model}"></li>
-                        <li th:text="'Price: ' + ${car.price}"></li>
-                        <li th:text="'Production: ' + ${car.production}"></li>
-                    </ul>
-                    <div sec:authorize="!isAuthenticated()">
-                        <a th:href="@{'/offers/{id}'(id=${car.id})}" class="btn btn-md offer-btn" href="#">Get an
-                            offer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="btn-group btn-block">
+        <a th:href="@{/free-transactions}" class="btn sign-btn active" href="#">Free Transactions</a>
+        <a th:href="@{/transactions-in-progress}" class="btn sign-btn" href="#">In Progress</a>
+        <a th:href="@{/transaction-statistics}" class="btn sign-btn" href="#">Statistic</a>
     </div>
+
+    <table class="table table-stripped text-center">
+        <tr>
+            <th>Number</th>
+            <th>Date</th>
+            <th>Model</th>
+            <th>Price</th>
+            <th>Customer</th>
+            <th></th>
+        </tr>
+        <tr th:each="transactionInfo : ${freeTransactions}">
+            <td th:text="${transactionInfo.id}"></td>
+            <td th:text="${transactionInfo.date}"></td>
+            <td th:text="${transactionInfo.model}"></td>
+            <td th:text="${transactionInfo.price}"></td>
+            <td th:text="${transactionInfo.customer}"></td>
+            <td>
+                <form class="form" action="#" th:action="@{'/pick-up/{id}' (id=${transactionInfo.id})}" method="POST">
+                    <button class="btn sign-btn" type="submit">Pick Up</button>
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
-<script src="/js/script.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
