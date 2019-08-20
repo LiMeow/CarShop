@@ -1,8 +1,7 @@
 package net.thumbtack.internship.carshop.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "manager")
@@ -11,10 +10,10 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
-    @JsonIgnore
     private String password;
 
-    public Manager() { }
+    public Manager() {
+    }
 
     public Manager(int id, String username, String password) {
         this.id = id;
@@ -48,5 +47,29 @@ public class Manager {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Manager)) return false;
+        Manager manager = (Manager) o;
+        return getId() == manager.getId() &&
+                getUsername().equals(manager.getUsername()) &&
+                getPassword().equals(manager.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getPassword());
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

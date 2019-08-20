@@ -8,7 +8,8 @@ public class AddTransactionStatusRequest {
     @NotNull
     private StatusName statusName;
 
-    public AddTransactionStatusRequest() { }
+    public AddTransactionStatusRequest() {
+    }
 
     public AddTransactionStatusRequest(@NotNull StatusName statusName) {
         this.statusName = statusName;

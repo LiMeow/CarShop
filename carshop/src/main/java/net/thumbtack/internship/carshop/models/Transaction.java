@@ -2,6 +2,7 @@ package net.thumbtack.internship.carshop.models;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="transaction")
@@ -32,8 +33,12 @@ public class Transaction {
         this.manager = manager;
     }
 
+    public Transaction(int id, Car car, Customer customer) {
+        this(id, car, customer, null);
+    }
+
     public Transaction(Car car, Customer customer) {
-        this(0, car, customer, null);
+        this(0, car, customer);
     }
 
     public int getId() {
@@ -66,5 +71,31 @@ public class Transaction {
 
     public void setManager(Manager manager) {
         this.manager = manager;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaction)) return false;
+        Transaction that = (Transaction) o;
+        return getId() == that.getId() &&
+                getCar().equals(that.getCar()) &&
+                getCustomer().equals(that.getCustomer()) &&
+                Objects.equals(getManager(), that.getManager());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCar(), getCustomer(), getManager());
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", car=" + car +
+                ", customer=" + customer +
+                ", manager=" + manager +
+                '}';
     }
 }

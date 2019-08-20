@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,20 +30,11 @@ public class TransactionViewController {
     }
 
     @GetMapping("/free-transactions")
-    public String freeTrannsactionsPage(Model model) {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
+    public String freeTransactionsPage(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(0, 8);
-        List<TransactionInfo> transactions = new ArrayList<>();
-
-        for (TransactionStatus transactionStatus : transactionStatuses) {
-            transactions.add(new TransactionInfo(
-                    transactionStatus.getTransaction().getId(),
-                    formatter.format(transactionStatus.getDate()),
-                    transactionStatus.getTransaction().getCar().getModel(),
-                    transactionStatus.getTransaction().getCar().getPrice(),
-                    transactionStatus.getTransaction().getCustomer().getName()));
-        }
+        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(username, 0, 8);
+        List<TransactionInfo> transactions = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("freeTransactions", transactions);
         return "freeTransactions";
@@ -60,20 +49,10 @@ public class TransactionViewController {
 
     @GetMapping("/transactions-in-progress")
     public String transactionsInProgressPage(Model model) {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<TransactionStatus> transactionStatuses = transactionService.getAllTransactionByManager(username, 0, 8);
-        List<TransactionInfo> transactions = new ArrayList<>();
-
-        for (TransactionStatus transactionStatus : transactionStatuses) {
-            transactions.add(new TransactionInfo(
-                    transactionStatus.getTransaction().getId(),
-                    formatter.format(transactionStatus.getDate()),
-                    transactionStatus.getTransaction().getCar().getModel(),
-                    transactionStatus.getTransaction().getCustomer().getName(),
-                    transactionStatus.getStatusName()));
-        }
+        List<TransactionStatus> transactionStatuses = transactionService.getAllTransactionByManager(username);
+        List<TransactionInfo> transactions = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("transactions", transactions);
         return "transactionsInProgress";
@@ -81,10 +60,10 @@ public class TransactionViewController {
 
     @GetMapping("/transaction-story/{id}")
     public String transactionStoryPage(@PathVariable("id") int transactionId, Model model) {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<TransactionStatus> statuses = transactionService.getTransactionStatuses(username, transactionId);
+        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
+        List<TransactionInfo> statuses = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("transactionId", transactionId);
         model.addAttribute("statuses", statuses);
@@ -94,8 +73,10 @@ public class TransactionViewController {
     @GetMapping("/transaction-story/{id}/add-status")
     public String addTransactionStatus(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.values()[transactionStatuses.size()]);
+
         transactionService.addTransactionStatus(request, username, transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
@@ -104,6 +85,7 @@ public class TransactionViewController {
     public String rejectTransaction(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
+
         transactionService.addTransactionStatus(request, username, transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
@@ -111,12 +93,14 @@ public class TransactionViewController {
     @GetMapping("/transaction-statistics")
     public String getChart(ModelMap modelMap) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<ChartItem> applicationСonfirmationData = chartService.getChartData(username, StatusName.APPLICATION_CONFIRMATION);
+
+        List<ChartItem> applicationConfirmationData = chartService.getChartData(username, StatusName.APPLICATION_CONFIRMATION);
         List<ChartItem> confirmedData = chartService.getChartData(username, StatusName.CONFIRMED);
 
-        modelMap.addAttribute("chartItems1", applicationСonfirmationData);
+        modelMap.addAttribute("chartItems1", applicationConfirmationData);
         modelMap.addAttribute("chartItems2", confirmedData);
         return "transactionsStatistics";
     }
+
 
 }

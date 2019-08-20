@@ -49,6 +49,7 @@
 .check-btn{
      border-color: #FF8C00;
 }
+
 .check-btn.active,
 .check-btn:hover,
 .check-btn:focus{
@@ -92,10 +93,14 @@ td a {
 }
 
 .table-hover tr:hover{
-    background-color: #FFBC40!important;
+    background-color: #F0FFF0!important;
 }
 
 .status-btn {
-    background-color: #8D29A6;
+    background-color: #008B8B;
     color:#FFFFFF;
+}
+
+.btn-danger {
+    background-color:#DF1A28!important;
 }

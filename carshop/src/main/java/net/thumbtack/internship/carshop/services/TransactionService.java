@@ -9,12 +9,14 @@ import net.thumbtack.internship.carshop.repositories.ManagerRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionStatusRepository;
 import net.thumbtack.internship.carshop.requests.AddTransactionStatusRequest;
+import net.thumbtack.internship.carshop.responses.TransactionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,36 +55,40 @@ public class TransactionService {
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public List<TransactionStatus> getAllFreeTransactions(int page, int size) {
+    public List<TransactionStatus> getAllFreeTransactions(String username, int page, int size) {
+        findManagerByUsername(username);
         Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
+
         return transactionStatusRepository.findAllFree(pageable);
     }
 
-    public List<TransactionStatus> getAllTransactionByManager(String username, int page, int size) {
+    public List<TransactionStatus> getAllTransactionByManager(String username) {
         Manager manager = findManagerByUsername(username);
-        Pageable pageable = PageRequest.of(0, 1);
-        List<Transaction> transactions = transactionRepository.findAllByManager(manager.getId());
-        List<TransactionStatus> transactionStatuses = new ArrayList<>();
-        for (Transaction transaction : transactions) {
-            transactionStatuses.add(transactionStatusRepository.findLastTransactionStatus(transaction.getId(), pageable).get(0));
-        }
-        return transactionStatuses;
+        return transactionStatusRepository.findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
     public List<TransactionStatus> getTransactionStatuses(String username, int transactionId) {
         findManagerByUsername(username);
         findTransactionById(transactionId);
+
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    private Manager findManagerById(int userId) {
-        Manager manager = managerRepository.findById(userId).orElse(null);
+    public List<TransactionInfo> getTransactionInfoList(List<TransactionStatus> transactionStatuses) {
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss     dd.MM.yyyy");
+        List<TransactionInfo> transactionInfoList = new ArrayList<>();
 
-        if (manager == null)
-            throw new CarShopException(ErrorCode.USER_NOT_EXISTS, String.valueOf(userId));
-
-        return manager;
+        for (TransactionStatus transactionStatus : transactionStatuses) {
+            transactionInfoList.add(new TransactionInfo(
+                    transactionStatus.getTransaction().getId(),
+                    formatter.format(transactionStatus.getDate()),
+                    transactionStatus.getTransaction().getCar().getModel(),
+                    transactionStatus.getTransaction().getCustomer().getName(),
+                    transactionStatus.getStatusName()));
+        }
+        return transactionInfoList;
     }
+
 
     private Manager findManagerByUsername(String username) {
         Manager manager = managerRepository.findByUsername(username);

@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Objects;
 
 @Embeddable
 public class ChartItem {
@@ -14,9 +15,17 @@ public class ChartItem {
     public ChartItem() {
     }
 
-    public ChartItem(int Y, String label) {
-        this.Y = Y;
+    public ChartItem(String label, int y) {
         this.label = label;
+        Y = y;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(Double label) {
+        this.label = Month.of(label.intValue()).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
     }
 
     public int getY() {
@@ -27,12 +36,18 @@ public class ChartItem {
         this.Y = y.intValue();
     }
 
-    public String getLabel() {
-        return label;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChartItem)) return false;
+        ChartItem chartItem = (ChartItem) o;
+        return getY() == chartItem.getY() &&
+                getLabel().equals(chartItem.getLabel());
     }
 
-    public void setLabel(Double label) {
-        this.label = Month.of(label.intValue()).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLabel(), getY());
     }
 
     @Override

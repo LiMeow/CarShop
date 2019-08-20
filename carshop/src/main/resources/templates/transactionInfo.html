@@ -10,34 +10,7 @@
 
 <body>
 <header>
-    <div class="navbar navbar-dark shadow-sm">
-        <div class="container d-flex justify-content-between">
-            <a th:href="@{/}" href="#" class="navbar-brand">
-                <img th:src="@{/img/UI/logo.png}">
-                <strong>CarShop</strong>
-            </a>
-
-            <div sec:authorize="isAuthenticated()">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle dropdown-btn"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img th:src="@{/img/UI/user.png}" width="35" height="35">
-                        <span sec:authentication="principal"/>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a th:href="@{/free-transactions}" class="dropdown-item dropdown-btn-item" href="#">View
-                            statistics</a>
-                        <a class="dropdown-item dropdown-btn-item" th:href="@{/}" href="#" onclick='removeCookies()'>Sign
-                            Out</a>
-                    </div>
-                </div>
-            </div>
-            <div sec:authorize="!isAuthenticated()">
-                <a th:href="@{/signin}" class="btn btn-outline-light" href="#">Sign In</a>
-            </div>
-
-        </div>
-    </div>
+    <div th:insert="~{header :: header}"></div>
 </header>
 
 <!--<div>
@@ -56,32 +29,36 @@
             <th>Status</th>
             <th>Description</th>
         </tr>
-        <tr th:each="transactionStatus : ${statuses}">
+        <tr th:each="transactionInfo,iteration : ${statuses}">
             <td>
                 <a href="#" class="stretched-link"></a>
             </td>
-            <td th:text="${transactionStatus.id}"></td>
-            <td th:text="${transactionStatus.date}"></td>
+            <td th:text="${iteration.count}"></td>
+            <td th:text="${transactionInfo.date}"></td>
             <td>
-                <button type="button" class="btn status-btn" th:text="${transactionStatus.statusName}"></button>
+                <button class="btn status-btn btn-block " th:text="${transactionInfo.status}"></button>
             </td>
-            <td th:text="${transactionStatus.description}"></td>
+            <td th:text="${transactionInfo.status.description}"></td>
         </tr>
     </table>
-    <div class="text-center">
-        <div class="btn-group btn-block">
-            <a th:href="@{'/transaction-story/{id}/add-status' (id=${transactionId})}" class="btn btn-lg sign-btn mt-4"
-               href="#">To next stage</a>
-            <a th:href="@{'/transaction-story/{id}/reject' (id=${transactionId})}" class="btn btn-lg btn-danger mt-4"
-               href="#">Rejected</a>
+    <div class="btn-group btn-block justify-content-center">
+
+        <div th:if="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED' }">
+            <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">To next stage</a>
+            <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">Rejected</a>
+        </div>
+
+        <div th:unless="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED'}">
+            <a th:href="@{'/transaction-story/{id}/add-status' (id=${transactionId})}"
+               class="btn btn-lg sign-btn  mt-4" href="#">To next stage</a>
+            <a th:href="@{'/transaction-story/{id}/reject' (id=${transactionId})}"
+               class="btn btn-lg btn-danger mt-4" href="#">Rejected</a>
         </div>
     </div>
+    </th>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-
 </body>
 </html>

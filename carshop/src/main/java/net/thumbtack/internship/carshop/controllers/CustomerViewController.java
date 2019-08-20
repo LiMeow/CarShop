@@ -35,11 +35,12 @@ public class CustomerViewController {
     }
 
     @PostMapping("/create/transaction/{id}")
-    public String addCustomerContacts(@PathVariable("id") int carId,
-                                      @ModelAttribute("request") CustomerRequest request,
+    public String addCustomerContacts(@ModelAttribute("request") CustomerRequest request,
+                                      @PathVariable("id") int carId,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "redirect:/offer/{id}";
+        System.out.println(request.getName());
         customerService.createTransaction(request, carId);
         return "redirect:/";
     }

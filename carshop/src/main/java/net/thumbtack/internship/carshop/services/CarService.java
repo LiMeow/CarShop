@@ -13,12 +13,8 @@ import java.util.List;
 
 @Service
 public class CarService {
-    private final CarRepository carRepository;
-
     @Autowired
-    public CarService(CarRepository carRepository) {
-        this.carRepository = carRepository;
-    }
+    private CarRepository carRepository;
 
     public Car createCar(CreateCarRequest request) {
         Car car = new Car(request.getPicture(), request.getModel(), request.getPrice(), request.getProduction());
@@ -63,6 +59,7 @@ public class CarService {
 
     private Car findCarById(int carId) {
         Car car = carRepository.findById(carId).orElse(null);
+
         if (car == null)
             throw new CarShopException(ErrorCode.CAR_NOT_EXISTS, String.valueOf(carId));
 
