@@ -4,6 +4,7 @@ package net.thumbtack.internship.carshop.models;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transaction_status")
@@ -24,6 +25,9 @@ public class TransactionStatus {
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
+    public TransactionStatus() {
+    }
+
     public TransactionStatus(int id, Timestamp date, StatusName statusName, String description, Transaction transaction) {
         this.id = id;
         this.date = date;
@@ -32,8 +36,12 @@ public class TransactionStatus {
         this.transaction = transaction;
     }
 
+    public TransactionStatus(int id, StatusName statusName, Transaction transaction) {
+        this(id, Timestamp.from(Instant.now()), statusName, statusName.getDescription(), transaction);
+    }
+
     public TransactionStatus(StatusName statusName, Transaction transaction) {
-        this(0, Timestamp.from(Instant.now()), statusName, statusName.getDescription(), transaction);
+        this(0, statusName, transaction);
     }
 
     public int getId() {
@@ -74,5 +82,32 @@ public class TransactionStatus {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TransactionStatus)) return false;
+        TransactionStatus status = (TransactionStatus) o;
+        return getId() == status.getId() &&
+                getStatusName() == status.getStatusName() &&
+                getDescription().equals(status.getDescription()) &&
+                getTransaction().equals(status.getTransaction());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStatusName(), getDescription(), getTransaction());
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionStatus{" +
+                "id=" + id +
+                ", date=" + date +
+                ", statusName=" + statusName +
+                ", description='" + description + '\'' +
+                ", transaction=" + transaction +
+                '}';
     }
 }

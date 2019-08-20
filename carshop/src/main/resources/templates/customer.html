@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CarShop</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body class="bg-light">
+<div class="container">
+    <label class="btn">
+        <a th:href="@{/back}" class="btn btn-outline-light back-btn" href="#">
+            <img th:src="@{/img/UI/arrowBack.png}" width="35" height="35">
+            back
+        </a>
+    </label>
+
+    <div class="text-center py-5">
+        <img th:src="@{/img/UI/logo.png}" width="80" height="80">
+        <h2>CarShop</h2>
+        <p class="lead">Leave your contacts and we will contact you in a manner convenient for you.</p>
+    </div>
+
+    <div class="container py-2">
+        <div class="row justify-content-center">
+            <div class="col-xs-9 col-sm-6 col-md-4 align-self-center">
+                <div class="card shadow-sm" height="auto">
+                    <img th:src="@{${car.picture}}" class="bd-placeholder-img card-img-top">
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li th:text="'Model: ' + ${car.model}"></li>
+                            <li th:text="'Price: ' + ${car.price}"></li>
+                            <li th:text="'Production: ' + ${car.production}"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-9 col-sm-6 col-md-5 align-self-center">
+                <form class="needs-validation" action="#" th:action="@{'/create/transaction/{id}' (id=${car.id})}"
+                      method="POST" validate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted">Phone*</small>
+                            <input type="text" name="phone" class="form-control" placeholder="+1 (234) 567 89 10"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please enter a phone number is required.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted">E-mail</small>
+                            <input type="e-mail" name="email" class="form-control" placeholder="you@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a email address for is required.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="my-3">
+                        <small class="text-muted">Name*</small>
+                        <input type="text" name="name" class="form-control" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Please enter your name is required.
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <button class="btn btn-lg btn-block sign-btn " type="submit">Send request</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="mt-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2019 CarShop</p>
+</footer>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

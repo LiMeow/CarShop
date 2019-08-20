@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    private ManagerRepository managerRepository;
-    private PasswordEncoder passwordEncoder;
+    private final ManagerRepository managerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(ManagerRepository managerRepository, PasswordEncoder passwordEncoder) {
@@ -23,8 +23,8 @@ public class AuthService {
     }
 
     public Manager signUp(AuthRequest request) {
-
         Manager manager = new Manager(request.getUsername(), passwordEncoder.encode(request.getPassword()));
+
         try {
             managerRepository.save(manager);
         } catch (ConstraintViolationException ex) {
@@ -37,7 +37,7 @@ public class AuthService {
         Manager manager = managerRepository.findByUsername(request.getUsername());
 
         if (manager == null)
-            throw new CarShopException(ErrorCode.USER_NOT_FOUND, request.getUsername());
+            throw new CarShopException(ErrorCode.USER_NOT_EXISTS, request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), manager.getPassword()))
             throw new CarShopException(ErrorCode.WRONG_PASSWORD);

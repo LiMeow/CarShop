@@ -7,6 +7,7 @@ public enum StatusName {
     CONTRACT_PREPARATION("Preparation of a purchase agreement"),
     PAYMENT_EXPECTED("Payment expected"),
     CAR_DELIVERY("Car delivery"),
+    COMPLETED("Application completed"),
     REJECTED("Application rejected");
 
     private String description;

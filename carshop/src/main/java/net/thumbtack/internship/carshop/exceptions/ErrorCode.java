@@ -9,8 +9,7 @@ public enum ErrorCode {
     TRANSACTION_NOT_EXISTS("transactionId","Transaction with id '%s' not exists" ),
     TRANSACTION_STATUS_NOT_EXISTS("transactionStatusId", "Status of transaction with id '%s' not exists"),
     USER_ALREADY_EXISTS("username", "User with username '%s' already exists."),
-    USER_NOT_FOUND("username", "User with username '%s' not found."),
-    USER_NOT_EXISTS("id", "User with id '%s' not exists."),
+    USER_NOT_EXISTS("id", "User with username '%s' not exists."),
     WRONG_OR_EMPTY_REQUEST("json", "Wrong or empty request"),
     WRONG_PASSWORD("password", "Wrong password."),
     WRONG_URL("url", "Wrong URL");

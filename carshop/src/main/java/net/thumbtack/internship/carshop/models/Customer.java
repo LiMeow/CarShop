@@ -2,6 +2,7 @@ package net.thumbtack.internship.carshop.models;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="customer")
@@ -13,6 +14,9 @@ public class Customer {
     private String phone;
     private String email;
 
+    public Customer() {
+    }
+
     public Customer(int id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
@@ -22,6 +26,10 @@ public class Customer {
 
     public Customer(String name, String phone, String email) {
         this(0, name, phone, email);
+    }
+
+    public Customer(int id, String name, String phone) {
+        this(id, name, phone, null);
     }
 
     public int getId() {
@@ -54,5 +62,31 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Customer)) return false;
+        Customer customer = (Customer) o;
+        return getId() == customer.getId() &&
+                getName().equals(customer.getName()) &&
+                getPhone().equals(customer.getPhone()) &&
+                Objects.equals(getEmail(), customer.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPhone(), getEmail());
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

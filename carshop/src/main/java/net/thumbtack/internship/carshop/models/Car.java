@@ -2,6 +2,7 @@ package net.thumbtack.internship.carshop.models;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="car")
@@ -76,5 +77,35 @@ public class Car {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        Car car = (Car) o;
+        return getId() == car.getId() &&
+                getPrice() == car.getPrice() &&
+                getProduction() == car.getProduction() &&
+                isAvailable() == car.isAvailable() &&
+                Objects.equals(getPicture(), car.getPicture()) &&
+                Objects.equals(getModel(), car.getModel());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPicture(), getModel(), getPrice(), getProduction(), isAvailable());
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", picture='" + picture + '\'' +
+                ", model='" + model + '\'' +
+                ", price=" + price +
+                ", production=" + production +
+                ", available=" + available +
+                '}';
     }
 }
