@@ -1,0 +1,107 @@
+.navbar-brand img{
+    width: 50px;
+ }
+
+ .navbar{
+    background-color:#FF8C00;
+ }
+
+.offer-btn {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-color: #FF8C00;
+    color: #FF8C00;
+}
+
+.sign-btn {
+    color:#FFFFFF;
+    background-color: #FF8C00;
+}
+
+.sign-btn.active,
+.sign-btn:hover,
+.sign-btn:focus{
+    outline: 0;
+    outline-color: transparent;
+    outline-width: 0;
+    outline-style: none;
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+    color:#FFFFFF;
+    background-color: #FFA500;
+}
+
+.form-auth {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.card img {
+    display: block;
+    height: 235;
+    width: 100%;
+}
+
+.check-btn{
+     border-color: #FF8C00;
+}
+
+.check-btn.active,
+.check-btn:hover,
+.check-btn:focus{
+     outline: 0;
+     outline-color: transparent;
+     outline-width: 0;
+     outline-style: none;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0);
+     background-color: #FF8C00;
+}
+
+.back-btn:hover {
+    background-color: #FFFFFF;
+    border-color: #FF8C00;
+}
+
+.dropdown-btn{
+     outline: 0!important;
+     outline-color: transparent!important;
+     outline-width: 0!important;
+     outline-style: none!important;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0)!important;
+     background-color: #FF8C00;
+     color: #FFFFFF;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus{
+    color: #FFFFFF;
+}
+
+.dropdown-btn-item:hover,
+.dropdown-btn-item:focus{
+    color: #FFFFFF;
+    background-color: #FF8C00;
+}
+td a {
+  position: absolute;
+    width: 100%;
+    left: 0px;
+    height: 3em;
+}
+
+.table-hover tr:hover{
+    background-color: #F0FFF0!important;
+}
+
+.status-btn {
+    background-color: #008B8B;
+    color:#FFFFFF;
+}
+
+.btn-danger {
+    background-color:#DF1A28!important;
+}
