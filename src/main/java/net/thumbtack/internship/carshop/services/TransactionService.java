@@ -95,6 +95,7 @@ public class TransactionService {
                     transactionStatus.getTransaction().getId(),
                     formatter.format(transactionStatus.getDate()),
                     transactionStatus.getTransaction().getCar().getModel(),
+                    transactionStatus.getTransaction().getCar().getPrice(),
                     transactionStatus.getTransaction().getCustomer().getName(),
                     transactionStatus.getStatusName()));
         }
