@@ -12,11 +12,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cars")
-public class CarRestController {
+public class CarController {
     private final CarService carService;
 
     @Autowired
-    public CarRestController(CarService carService) {
+    public CarController(CarService carService) {
         this.carService = carService;
     }
 
