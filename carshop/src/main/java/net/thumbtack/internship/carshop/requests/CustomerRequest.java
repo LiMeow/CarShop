@@ -5,11 +5,14 @@ import javax.validation.constraints.NotNull;
 public class CustomerRequest {
     @NotNull
     private String name;
-    @NotNull
     private String phone;
     private String email;
 
-    public CustomerRequest() { }
+    public CustomerRequest(@NotNull String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
 
     public String getName() {
         return name;

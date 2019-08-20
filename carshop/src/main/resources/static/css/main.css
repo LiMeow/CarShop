@@ -18,11 +18,60 @@
     background-color: #FF8C00;
 }
 
-.form-auth{
-      margin: 0;
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      margin-right: -50%;
-      transform: translate(-50%, -50%)
+.sign-btn:hover {
+    background-color: #FFA500;
+}
+
+.form-auth {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.card img {
+    display: block;
+    height: 235;
+    width: 100%;
+}
+
+.check-btn{
+     border-color: #FF8C00;
+}
+.check-btn.active,
+.check-btn:hover,
+.check-btn:focus{
+     outline: 0;
+     outline-color: transparent;
+     outline-width: 0;
+     outline-style: none;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0);
+     background-color: #FF8C00;
+}
+
+.back-btn:hover {
+    border-color: #FF8C00;
+}
+
+.dropdown-btn{
+     outline: 0!important;
+     outline-color: transparent!important;
+     outline-width: 0!important;
+     outline-style: none!important;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0)!important;
+     background-color: #FF8C00;
+     color:#FFFFFF;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus{
+      color:#FFFFFF;
+}
+
+.dropdown-btn-item:hover,
+.dropdown-btn-item:focus{
+    color:#FFFFFF;
+    background-color: #FF8C00;
 }

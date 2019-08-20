@@ -34,8 +34,17 @@ public class CarController {
     public ResponseEntity<?> updateCar(@RequestBody UpdateCarRequest request,
                                        @PathVariable("id") int carId) {
 
-        return ResponseEntity.ok().body(carService.updateCar(request,carId));
+        return ResponseEntity.ok().body(carService.updateCar(request, carId));
     }
+
+    @GetMapping(value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCar(@PathVariable("id") int carId) {
+
+        return ResponseEntity.ok().body(carService.getCar(carId));
+    }
+
 
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -53,7 +62,6 @@ public class CarController {
 
         return ResponseEntity.noContent().build();
     }
-
 
 
 }
