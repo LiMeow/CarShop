@@ -1,7 +1,7 @@
 package net.thumbtack.internship.carshop.controllers.rest;
 
 import net.thumbtack.internship.carshop.requests.CreateCarRequest;
-import net.thumbtack.internship.carshop.requests.UpdateCarRequest;
+import net.thumbtack.internship.carshop.requests.EditCarRequest;
 import net.thumbtack.internship.carshop.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,10 +31,10 @@ public class CarController {
     @PutMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateCar(@RequestBody UpdateCarRequest request,
-                                       @PathVariable("id") int carId) {
+    public ResponseEntity<?> editCar(@RequestBody EditCarRequest request,
+                                     @PathVariable("id") int carId) {
 
-        return ResponseEntity.ok().body(carService.updateCar(request,carId));
+        return ResponseEntity.ok().body(carService.editCar(request, carId));
     }
 
     @GetMapping(

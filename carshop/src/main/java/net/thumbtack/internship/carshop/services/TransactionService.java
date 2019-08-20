@@ -6,11 +6,10 @@ import net.thumbtack.internship.carshop.models.Manager;
 import net.thumbtack.internship.carshop.models.StatusName;
 import net.thumbtack.internship.carshop.models.Transaction;
 import net.thumbtack.internship.carshop.models.TransactionStatus;
-import net.thumbtack.internship.carshop.repositories.CustomerRepository;
 import net.thumbtack.internship.carshop.repositories.ManagerRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionRepository;
 import net.thumbtack.internship.carshop.repositories.TransactionStatusRepository;
-import net.thumbtack.internship.carshop.requests.AddTransactionStatusRequest;
+import net.thumbtack.internship.carshop.requests.TransactionStatusRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,11 +46,31 @@ public class TransactionService {
         return transactionStatus;
     }
 
-    public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, int userId, int transactionId) {
+    public List<TransactionStatus> addTransactionStatus(TransactionStatusRequest request, int userId, int transactionId) {
         findManagerById(userId);
         Transaction transaction = findTransactionById(transactionId);
 
         TransactionStatus status = new TransactionStatus(request.getStatusName(), transaction);
+        transactionStatusRepository.save(status);
+
+        return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
+    }
+
+    public void deleteTransactionStatus(int userId, int transactionId, int transactionStatusId) {
+        findManagerById(userId);
+        findTransactionById(transactionId);
+        findTransactionStatusById(transactionStatusId);
+
+        transactionStatusRepository.deleteById(transactionStatusId);
+    }
+
+    public List<TransactionStatus> editTransactionStatus(TransactionStatusRequest request, int userId, int transactionId, int transactionStatusId) {
+        findManagerById(userId);
+        findTransactionById(transactionId);
+
+        TransactionStatus status = findTransactionStatusById(transactionStatusId);
+
+        status.setStatusName(request.getStatusName());
         transactionStatusRepository.save(status);
 
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
@@ -93,4 +112,13 @@ public class TransactionService {
 
         return transaction;
     }
+
+    private TransactionStatus findTransactionStatusById(int transactionStatusId) {
+        TransactionStatus status = transactionStatusRepository.findById(transactionStatusId).orElse(null);
+        if (status == null)
+            throw new CarShopException(ErrorCode.TRANSACTION_STATUS_NOT_EXISTS, String.valueOf(transactionStatusId));
+
+        return status;
+    }
+
 }
