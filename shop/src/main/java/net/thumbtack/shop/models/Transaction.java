@@ -21,12 +21,12 @@ public class Transaction {
 
     @OneToOne
     @JoinColumn(name="manager_id")
-    private Manager manager;
+    private User manager;
 
     public Transaction() {
     }
 
-    public Transaction(int id, Car car, Customer customer, Manager manager) {
+    public Transaction(int id, Car car, Customer customer, User manager) {
         this.id = id;
         this.car = car;
         this.customer = customer;
@@ -65,11 +65,11 @@ public class Transaction {
         this.customer = customer;
     }
 
-    public Manager getManager() {
+    public User getManager() {
         return manager;
     }
 
-    public void setManager(Manager manager) {
+    public void setManager(User manager) {
         this.manager = manager;
     }
 

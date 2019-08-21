@@ -3,6 +3,7 @@ package net.thumbtack.shop.exceptions;
 public enum ErrorCode {
 
     CAR_NOT_EXISTS("", "Car with id '%s' not exists."),
+    CUSTOMER_NOT_EXISTS("customerId", "Customer with id '%s' not exists."),
     EMPTY_REQUEST_BODY("json", "Empty request body."),
     INTERNAL_SERVER_ERROR("", "'%s'"),
     REQUEST_NOT_FOUND("", "Customer with id '%s' not found."),

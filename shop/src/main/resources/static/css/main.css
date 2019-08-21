@@ -105,3 +105,12 @@ td a {
 .btn-danger {
     background-color:#DF1A28!important;
 }
+
+.center {
+    margin: 0;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%)
+}

@@ -1,7 +1,8 @@
 package net.thumbtack.shop;
 
-import net.thumbtack.shop.models.Manager;
-import net.thumbtack.shop.repositories.ManagerRepository;
+import net.thumbtack.shop.models.User;
+import net.thumbtack.shop.models.UserRole;
+import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.requests.AuthRequest;
 import net.thumbtack.shop.services.AuthService;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AuthServiceTests {
     @Mock
-    private ManagerRepository managerRepository;
+    private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks
@@ -27,26 +28,26 @@ public class AuthServiceTests {
     @Test
     public void testSignUp() {
         AuthRequest request = new AuthRequest("manager", "password");
-        Manager manager = new Manager(request.getUsername(), request.getPassword());
+        User manager = new User(request.getUsername(), request.getPassword(), UserRole.ROLE_MANAGER);
 
-        when(managerRepository.save(manager)).thenReturn(manager);
+        when(userRepository.save(manager)).thenReturn(manager);
         when(passwordEncoder.encode(request.getPassword())).thenReturn(request.getPassword());
 
         assertEquals(manager, authService.signUp(request));
-        verify(managerRepository).save(manager);
+        verify(userRepository).save(manager);
         verify(passwordEncoder).encode(request.getPassword());
     }
 
     @Test
     public void testSignIn() {
         AuthRequest request = new AuthRequest("manager", "password");
-        Manager manager = new Manager(request.getUsername(), request.getPassword());
+        User manager = new User(request.getUsername(), request.getPassword(), UserRole.ROLE_MANAGER);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findByUsername(manager.getUsername())).thenReturn(manager);
         when(passwordEncoder.matches(request.getPassword(), manager.getPassword())).thenReturn(true);
 
         assertEquals(manager, authService.signIn(request));
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findByUsername(manager.getUsername());
         verify(passwordEncoder).matches(request.getPassword(), manager.getPassword());
     }
 }

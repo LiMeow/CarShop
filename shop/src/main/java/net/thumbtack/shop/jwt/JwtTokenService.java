@@ -1,7 +1,7 @@
 package net.thumbtack.shop.jwt;
 
 
-import net.thumbtack.shop.models.Manager;
+import net.thumbtack.shop.models.User;
 import net.thumbtack.shop.requests.AuthRequest;
 import org.springframework.security.core.Authentication;
 
@@ -12,7 +12,9 @@ public interface JwtTokenService {
 
     Authentication parseToken(String token);
 
-    String createToken(Manager manager);
+    //String createToken(Manager manager);
+
+    String createToken(User user);
 
     String createToken(AuthRequest request);
 
