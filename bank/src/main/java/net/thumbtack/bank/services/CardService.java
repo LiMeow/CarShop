@@ -3,6 +3,9 @@ package net.thumbtack.bank.services;
 import net.thumbtack.bank.exceptions.BankException;
 import net.thumbtack.bank.exceptions.ErrorCode;
 import net.thumbtack.bank.models.Card;
+import net.thumbtack.bank.models.CardOperation;
+import net.thumbtack.bank.models.Operation;
+import net.thumbtack.bank.repositories.CardOperationRepository;
 import net.thumbtack.bank.repositories.CardRepository;
 import net.thumbtack.bank.requests.CreateCardRequest;
 import net.thumbtack.bank.requests.DeleteCardRequest;
@@ -19,9 +22,15 @@ import java.util.Random;
 
 @Service
 public class CardService {
-    @Autowired
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
+    private final CardOperationRepository cardOperationRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(CardService.class);
+
+    @Autowired
+    public CardService(CardRepository cardRepository, CardOperationRepository cardOperationRepository) {
+        this.cardRepository = cardRepository;
+        this.cardOperationRepository = cardOperationRepository;
+    }
 
     public Card createCard(CreateCardRequest request) {
         LOGGER.debug("CardRepository create Card for '{}'", request.getCardHolderName());
@@ -31,9 +40,9 @@ public class CardService {
                 generateValidity(),
                 generateCvv(),
                 request.getCardHolderName());
-
         cardRepository.save(card);
 
+        logOperation(card, CardOperation.CARD_CREATED, card.getCardNumber());
         return card;
     }
 
@@ -44,6 +53,7 @@ public class CardService {
         card.putMoney(request.getMoney());
         cardRepository.save(card);
 
+        logOperation(card, CardOperation.PUT_MONEY, String.valueOf(request.getMoney()));
         return getCardInfo(card);
     }
 
@@ -59,6 +69,7 @@ public class CardService {
         card.takeMoney(request.getMoney());
         cardRepository.save(card);
 
+        logOperation(card, CardOperation.TAKE_MONEY, String.valueOf(request.getMoney()));
         return getCardInfo(card);
 
     }
@@ -70,7 +81,9 @@ public class CardService {
         checkCard(card, request.getValidity(), request.getCvv(), request.getCardHolderName());
 
         cardRepository.deleteById(card.getId());
+        logOperation(card, CardOperation.CARD_DELETED, card.getCardNumber());
     }
+
 
     private String generateCardNumber() {
         LOGGER.debug("CardService: card number generation");
@@ -124,6 +137,10 @@ public class CardService {
 
         if (!card.getCardHolderName().equals(cardHolderName))
             throw new BankException(ErrorCode.INVALID_CARD_HOLDER_NAME);
+    }
+
+    private void logOperation(Card card, CardOperation operation, String... params) {
+        cardOperationRepository.save(new Operation(card, String.format(operation.getMessage(), params)));
     }
 
     private CardInfo getCardInfo(Card card) {

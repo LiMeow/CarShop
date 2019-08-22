@@ -25,19 +25,19 @@ public class Card {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
     @JsonIgnore
-    private List<OperationsHistory> operationsHistory;
+    private List<Operation> operation;
 
     public Card() {
     }
 
-    public Card(int id, String cardNumber, String validity, String cvv, String cardHolderName, double balance, List<OperationsHistory> operationsHistory) {
+    public Card(int id, String cardNumber, String validity, String cvv, String cardHolderName, double balance, List<Operation> operation) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.validity = validity;
         this.cvv = cvv;
         this.cardHolderName = cardHolderName;
         this.balance = balance;
-        this.operationsHistory = operationsHistory;
+        this.operation = operation;
     }
 
     public Card(int id, String cardNumber, String validity, String cvv, String cardHolderName, double balance) {
@@ -104,12 +104,12 @@ public class Card {
         this.balance -= money;
     }
 
-    public List<OperationsHistory> getOperationsHistory() {
-        return operationsHistory;
+    public List<Operation> getOperation() {
+        return operation;
     }
 
-    public void setOperationsHistory(List<OperationsHistory> operationsHistory) {
-        this.operationsHistory = operationsHistory;
+    public void setOperation(List<Operation> operation) {
+        this.operation = operation;
     }
 
     @Override
@@ -123,12 +123,12 @@ public class Card {
                 getValidity().equals(card.getValidity()) &&
                 getCvv().equals(card.getCvv()) &&
                 getCardHolderName().equals(card.getCardHolderName()) &&
-                Objects.equals(getOperationsHistory(), card.getOperationsHistory());
+                Objects.equals(getOperation(), card.getOperation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCardNumber(), getValidity(), getCvv(), getCardHolderName(), getBalance(), getOperationsHistory());
+        return Objects.hash(getId(), getCardNumber(), getValidity(), getCvv(), getCardHolderName(), getBalance(), getOperation());
     }
 
     @Override
@@ -140,7 +140,7 @@ public class Card {
                 ", cvv='" + cvv + '\'' +
                 ", cardHolderName='" + cardHolderName + '\'' +
                 ", balance=" + balance +
-                ", operationsHistory=" + operationsHistory +
+                ", operationsHistory=" + operation +
                 '}';
     }
 }

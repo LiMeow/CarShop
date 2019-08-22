@@ -1,23 +1,22 @@
 package net.thumbtack.bank.models;
 
 public enum CardOperation {
-    PUT_MONEY("Car with id '%s' not exists."),
-    TAKE_MONEY("Car with id '%s' not exists.");
+    CARD_CREATED("Card with number '%s' has been created."),
+    CARD_DELETED("Car with number '%s' has been deleted."),
+    PUT_MONEY("+'%s'"),
+    TAKE_MONEY("-'%s'");
 
-    private String description;
+    private String message;
 
     CardOperation() {
     }
 
-    CardOperation(String description) {
-        this.description = description;
+    CardOperation(String message) {
+        this.message = message;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public String getMessage() {
+        return message;
     }
 }
+

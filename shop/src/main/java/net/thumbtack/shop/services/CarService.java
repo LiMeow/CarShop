@@ -15,9 +15,13 @@ import java.util.List;
 
 @Service
 public class CarService {
-    @Autowired
-    private CarRepository carRepository;
+    private final CarRepository carRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(CarService.class);
+
+    @Autowired
+    public CarService(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
 
 
     public Car createCar(CreateCarRequest request) {

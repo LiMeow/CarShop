@@ -10,7 +10,7 @@ CREATE TABLE card(
 	balance double precision not null
 );
 
-CREATE TABLE operations_history( 	
+CREATE TABLE operation( 	
 	id serial primary key,
 	card_id integer not null REFERENCES card (id),
 	operation text not null,
