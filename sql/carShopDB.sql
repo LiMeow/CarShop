@@ -5,7 +5,7 @@ CREATE TABLE shop_user(
 	id serial primary key,
 	username text unique not null,
 	password text not null,
-	user_type text not null
+	user_role text not null
 );
 
 /*CREATE TABLE manager ( 	
