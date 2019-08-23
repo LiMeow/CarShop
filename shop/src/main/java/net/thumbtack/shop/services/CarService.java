@@ -60,9 +60,9 @@ public class CarService {
         return findCarById(carId);
     }
 
-    public List<Car> getCars() {
+    public List<Car> getAvailableCars() {
         LOGGER.debug("CarRepository get available Cars");
-        return (List<Car>) carRepository.findAllAvailable();
+        return carRepository.findAllAvailable();
     }
 
     public void deleteCar(int carId) {

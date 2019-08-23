@@ -9,7 +9,7 @@ public class AuthRequest {
     private String username;
     @NotNull
     private String password;
-
+    @NotNull
     private UserRole userRole;
 
     private int customerId;
@@ -17,7 +17,7 @@ public class AuthRequest {
     public AuthRequest() {
     }
 
-    public AuthRequest(@NotNull String username, @NotNull String password, UserRole userRole, int customerId) {
+    public AuthRequest(@NotNull String username, @NotNull String password, @NotNull UserRole userRole, int customerId) {
         this.username = username;
         this.password = password;
         this.userRole = userRole;

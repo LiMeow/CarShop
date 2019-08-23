@@ -7,7 +7,6 @@ import net.thumbtack.shop.models.User;
 import net.thumbtack.shop.repositories.CustomerRepository;
 import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.requests.AuthRequest;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,20 +36,20 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword()),
                 request.getUserRole());
 
-        try {
-            userRepository.save(user);
-        } catch (ConstraintViolationException ex) {
-            LOGGER.error("Can't signUp User  {}, {}", user, ex);
+        if (userRepository.findByUsername(request.getUsername()) != null) {
+            LOGGER.error("Can't signUp User  {}", user);
             throw new CarShopException(ErrorCode.USER_ALREADY_EXISTS, request.getUsername());
         }
-
         if (request.getCustomerId() != 0) {
             Customer customer = customerRepository.findById(request.getCustomerId()).orElse(null);
+
             if (customer == null)
                 throw new CarShopException(ErrorCode.CUSTOMER_NOT_EXISTS, String.valueOf(request.getCustomerId()));
+
             customer.setUser(user);
             customerRepository.save(customer);
         }
+        userRepository.save(user);
         return user;
     }
 

@@ -24,12 +24,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarServiceTests {
-
     @Mock
     private CarRepository carRepository;
-
     @InjectMocks
-    private CarService carService = new CarService(carRepository);
+    private CarService carService;
 
     @Test
     public void testCreateCar() {
@@ -64,16 +62,16 @@ public class CarServiceTests {
     }
 
     @Test
-    public void testGetCars() {
+    public void testGetAvailableCars() {
         Car car1 = new Car(1, "picture1.jpg", "Audi A8", 1000000, 2016, true);
         Car car2 = new Car(2, "picture2.jpg", "Audi A9", 2000000, 2017, true);
         Car car3 = new Car(3, "picture3.jpg", "Audi A10", 3000000, 2018, true);
 
         List<Car> cars = Arrays.asList(car1, car2, car3);
-        when(carRepository.findAll()).thenReturn(cars);
+        when(carRepository.findAllAvailable()).thenReturn(cars);
 
-        assertEquals(cars, carService.getCars());
-        verify(carRepository).findAll();
+        assertEquals(cars, carService.getAvailableCars());
+        verify(carRepository).findAllAvailable();
     }
 
     @Test

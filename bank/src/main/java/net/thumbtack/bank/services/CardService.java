@@ -17,9 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Random;
-
 @Service
 public class CardService {
     private final CardRepository cardRepository;
@@ -35,11 +32,7 @@ public class CardService {
     public Card createCard(CreateCardRequest request) {
         LOGGER.debug("CardRepository create Card for '{}'", request.getCardHolderName());
 
-        Card card = new Card(
-                generateCardNumber(),
-                generateValidity(),
-                generateCvv(),
-                request.getCardHolderName());
+        Card card = new Card(request.getCardHolderName());
         cardRepository.save(card);
 
         logOperation(card, CardOperation.CARD_CREATED, card.getCardNumber());
@@ -85,39 +78,6 @@ public class CardService {
     }
 
 
-    private String generateCardNumber() {
-        LOGGER.debug("CardService: card number generation");
-
-        String cardNumber = "";
-        Random random = new Random();
-
-        for (int i = 0; i < 4; i++) {
-            cardNumber += (random.nextInt(8999) + 1000) + " ";
-        }
-        return cardNumber.substring(0, cardNumber.length() - 1);
-    }
-
-    private String generateValidity() {
-        LOGGER.debug("CardService: card validity generation");
-
-        LocalDate date = LocalDate.now();
-        String validity = date.getDayOfMonth() + "/" + (date.getYear() + 5);
-
-        return validity;
-    }
-
-    private String generateCvv() {
-        LOGGER.debug("CardService: card cvv generation");
-
-        String cvv = "";
-        Random random = new Random();
-
-        for (int i = 0; i < 3; i++) {
-            cvv += random.nextInt(9);
-        }
-        return cvv;
-    }
-
     private Card findCardByNumber(String cardNumber) {
         Card card = cardRepository.findByCardNumber(cardNumber);
         if (card == null) {
@@ -129,7 +89,7 @@ public class CardService {
     }
 
     private void checkCard(Card card, String validity, String cvv, String cardHolderName) {
-        if (!card.getValidity().equals(validity))
+        if (!card.getExpiryDate().equals(validity))
             throw new BankException(ErrorCode.INVALID_EXPIRATION_DATE);
 
         if (!card.getCvv().equals(cvv))

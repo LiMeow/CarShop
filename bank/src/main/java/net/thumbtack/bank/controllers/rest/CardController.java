@@ -38,11 +38,10 @@ public class CardController {
         return ResponseEntity.ok().body(cardService.putMoney(request));
     }
 
-    @PutMapping(value = "/take-money",
+    @PostMapping(value = "/take-money",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> takeMoney(@Valid @RequestBody TakeMoneyRequest request) {
-        System.out.println(request.toString());
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ResponseEntity<?> takeMoney(@Valid TakeMoneyRequest request) {
         return ResponseEntity.ok().body(cardService.takeMoney(request));
     }
 

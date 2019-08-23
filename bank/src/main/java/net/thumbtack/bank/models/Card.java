@@ -3,9 +3,11 @@ package net.thumbtack.bank.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Entity
 @Table(name = "card")
@@ -16,7 +18,8 @@ public class Card {
 
     @Column(name = "card_number")
     private String cardNumber;
-    private String validity;
+    @Column(name = "expiry_date")
+    private String expiryDate;
     private String cvv;
 
     @Column(name = "card_holder_name")
@@ -30,23 +33,35 @@ public class Card {
     public Card() {
     }
 
-    public Card(int id, String cardNumber, String validity, String cvv, String cardHolderName, double balance, List<Operation> operation) {
+    public Card(int id, String cardNumber, String expiryDate, String cvv, String cardHolderName, double balance, List<Operation> operation) {
         this.id = id;
         this.cardNumber = cardNumber;
-        this.validity = validity;
+        this.expiryDate = expiryDate;
         this.cvv = cvv;
         this.cardHolderName = cardHolderName;
         this.balance = balance;
         this.operation = operation;
     }
 
-    public Card(int id, String cardNumber, String validity, String cvv, String cardHolderName, double balance) {
-        this(id, cardNumber, validity, cvv, cardHolderName, balance, new ArrayList<>());
+    public Card(int id, String cardHolderName, double balance, List<Operation> operation) {
+        this.id = id;
+        this.cardNumber = generateCardNumber();
+        this.expiryDate = generateValidity();
+        this.cvv = generateCvv();
+        this.cardHolderName = cardHolderName;
+        this.balance = balance;
+        this.operation = operation;
     }
 
-    public Card(String cardNumber, String validity, String cvv, String cardHolderName) {
-        this(0, cardNumber, validity, cvv, cardHolderName, 0);
+    public Card(String cardHolderName) {
+        this(0, cardHolderName, 0, new ArrayList<>());
+
     }
+
+    public Card(String cardHolderName, double balance) {
+        this(0, cardHolderName, balance, new ArrayList<>());
+    }
+
 
     public int getId() {
         return id;
@@ -64,12 +79,12 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public String getValidity() {
-        return validity;
+    public String getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setValidity(String validity) {
-        this.validity = validity;
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public String getCvv() {
@@ -112,6 +127,35 @@ public class Card {
         this.operation = operation;
     }
 
+    public String generateCardNumber() {
+        String cardNumber = "";
+        Random random = new Random();
+
+        for (int i = 0; i < 4; i++) {
+            cardNumber += (random.nextInt(8999) + 1000) + " ";
+        }
+        return cardNumber.substring(0, cardNumber.length() - 1);
+    }
+
+    public String generateValidity() {
+
+        LocalDate date = LocalDate.now();
+        String validity = date.getDayOfMonth() + "/" + (date.getYear() + 5);
+
+        return validity;
+    }
+
+    public String generateCvv() {
+
+        String cvv = "";
+        Random random = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            cvv += random.nextInt(9);
+        }
+        return cvv;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,7 +164,7 @@ public class Card {
         return getId() == card.getId() &&
                 Double.compare(card.getBalance(), getBalance()) == 0 &&
                 getCardNumber().equals(card.getCardNumber()) &&
-                getValidity().equals(card.getValidity()) &&
+                getExpiryDate().equals(card.getExpiryDate()) &&
                 getCvv().equals(card.getCvv()) &&
                 getCardHolderName().equals(card.getCardHolderName()) &&
                 Objects.equals(getOperation(), card.getOperation());
@@ -128,7 +172,7 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCardNumber(), getValidity(), getCvv(), getCardHolderName(), getBalance(), getOperation());
+        return Objects.hash(getId(), getCardNumber(), getExpiryDate(), getCvv(), getCardHolderName(), getBalance(), getOperation());
     }
 
     @Override
@@ -136,7 +180,7 @@ public class Card {
         return "Card{" +
                 "id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", validity='" + validity + '\'' +
+                ", validity='" + expiryDate + '\'' +
                 ", cvv='" + cvv + '\'' +
                 ", cardHolderName='" + cardHolderName + '\'' +
                 ", balance=" + balance +

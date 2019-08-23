@@ -52,7 +52,7 @@ public class CarController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllCars() {
 
-        return ResponseEntity.ok().body(carService.getCars());
+        return ResponseEntity.ok().body(carService.getAvailableCars());
     }
 
     @DeleteMapping(value = "/{id}",

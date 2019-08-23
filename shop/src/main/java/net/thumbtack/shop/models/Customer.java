@@ -22,19 +22,24 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int id, String name, String phone, String email) {
+    public Customer(int id, User user, String name, String phone, String email) {
         this.id = id;
+        this.user = user;
         this.name = name;
         this.phone = phone;
         this.email = email;
     }
 
     public Customer(String name, String phone, String email) {
-        this(0, name, phone, email);
+        this(0, null, name, phone, email);
     }
 
     public Customer(int id, String name, String phone) {
-        this(id, name, phone, null);
+        this(id, null, name, phone, null);
+    }
+
+    public Customer(int id, User user, String name, String phone) {
+        this(id, user, name, phone, null);
     }
 
     public int getId() {
