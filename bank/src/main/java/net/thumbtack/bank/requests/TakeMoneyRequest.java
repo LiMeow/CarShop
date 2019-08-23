@@ -11,10 +11,12 @@ public class TakeMoneyRequest {
     private String cvv;
     @NotNull
     private String cardHolderName;
-    @NotNull
     private double money;
 
-    public TakeMoneyRequest(@NotNull String cardNumber, @NotNull String validity, @NotNull String cvv, @NotNull String cardHolderName, @NotNull double money) {
+    public TakeMoneyRequest() {
+    }
+
+    public TakeMoneyRequest(@NotNull String cardNumber, @NotNull String validity, @NotNull String cvv, @NotNull String cardHolderName, double money) {
         this.cardNumber = cardNumber;
         this.validity = validity;
         this.cvv = cvv;
@@ -60,5 +62,16 @@ public class TakeMoneyRequest {
 
     public void setMoney(double money) {
         this.money = money;
+    }
+
+    @Override
+    public String toString() {
+        return "TakeMoneyRequest{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", validity='" + validity + '\'' +
+                ", cvv='" + cvv + '\'' +
+                ", cardHolderName='" + cardHolderName + '\'' +
+                ", money=" + money +
+                '}';
     }
 }

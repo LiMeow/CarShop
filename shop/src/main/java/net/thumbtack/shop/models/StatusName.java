@@ -6,6 +6,7 @@ public enum StatusName {
     TEST_DRIVE("Meeting with buyer expected"),
     CONTRACT_PREPARATION("Preparation of a purchase agreement"),
     PAYMENT_EXPECTED("Payment expected"),
+    PAID("Payment completed successfully"),
     CAR_DELIVERY("Car delivery"),
     COMPLETED("Application completed"),
     REJECTED("Application rejected");

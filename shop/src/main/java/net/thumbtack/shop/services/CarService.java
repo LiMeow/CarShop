@@ -61,8 +61,8 @@ public class CarService {
     }
 
     public List<Car> getCars() {
-        LOGGER.debug("CarRepository get Cars");
-        return (List<Car>) carRepository.findAll();
+        LOGGER.debug("CarRepository get available Cars");
+        return (List<Car>) carRepository.findAllAvailable();
     }
 
     public void deleteCar(int carId) {

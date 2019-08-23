@@ -72,7 +72,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/create/transaction/**",
                 "/back").permitAll()
                 .and()
-                .authorizeRequests().anyRequest().hasAuthority("MANAGER");
+                .authorizeRequests().antMatchers("/transaction-story", "/*/pay", "/pay-success").hasAuthority("ROLE_CUSTOMER")
+                .and()
+                .authorizeRequests().anyRequest().hasAuthority("ROLE_MANAGER");
     }
 
 

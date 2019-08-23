@@ -18,6 +18,10 @@ public class UpdateCarRequest {
         this.available = available;
     }
 
+    public UpdateCarRequest(Boolean available) {
+        this(null, null, 0, 0, available);
+    }
+
     public String getPicture() {
         return picture;
     }

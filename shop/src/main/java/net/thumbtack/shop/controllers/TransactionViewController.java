@@ -3,8 +3,10 @@ package net.thumbtack.shop.controllers;
 import net.thumbtack.shop.models.StatusName;
 import net.thumbtack.shop.models.TransactionStatus;
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.requests.UpdateCarRequest;
 import net.thumbtack.shop.responses.ChartItem;
 import net.thumbtack.shop.responses.TransactionInfo;
+import net.thumbtack.shop.services.CarService;
 import net.thumbtack.shop.services.ChartService;
 import net.thumbtack.shop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,13 @@ import java.util.List;
 
 @Controller
 public class TransactionViewController {
+    private final CarService carService;
     private final TransactionService transactionService;
     private final ChartService chartService;
 
     @Autowired
-    public TransactionViewController(TransactionService transactionService, ChartService chartService) {
+    public TransactionViewController(CarService carService, TransactionService transactionService, ChartService chartService) {
+        this.carService = carService;
         this.transactionService = transactionService;
         this.chartService = chartService;
     }
@@ -67,7 +71,7 @@ public class TransactionViewController {
 
         model.addAttribute("transactionId", transactionId);
         model.addAttribute("statuses", statuses);
-        return "transactionInfo";
+        return "transactionInfoForManager";
     }
 
     @GetMapping("/transaction-story/{id}/add-status")
@@ -75,7 +79,14 @@ public class TransactionViewController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
-        AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.values()[transactionStatuses.size()]);
+        StatusName nextStatus = StatusName.values()[transactionStatuses.size()];
+        AddTransactionStatusRequest request = new AddTransactionStatusRequest(nextStatus);
+
+        if (nextStatus.equals(StatusName.CONTRACT_PREPARATION))
+            carService.updateCar(
+                    new UpdateCarRequest(false),
+                    transactionStatuses.get(0).getTransaction().getCar().getId());
+
 
         transactionService.addTransactionStatus(request, username, transactionId);
         return "redirect:/transaction-story/" + transactionId;

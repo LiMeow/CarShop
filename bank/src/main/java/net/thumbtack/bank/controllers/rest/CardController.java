@@ -1,4 +1,4 @@
-package net.thumbtack.bank.controllers;
+package net.thumbtack.bank.controllers.rest;
 
 import net.thumbtack.bank.requests.CreateCardRequest;
 import net.thumbtack.bank.requests.DeleteCardRequest;
@@ -42,7 +42,7 @@ public class CardController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> takeMoney(@Valid @RequestBody TakeMoneyRequest request) {
-
+        System.out.println(request.toString());
         return ResponseEntity.ok().body(cardService.takeMoney(request));
     }
 
