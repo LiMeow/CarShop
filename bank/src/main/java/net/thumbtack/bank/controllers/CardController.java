@@ -1,4 +1,4 @@
-package net.thumbtack.bank.controllers.rest;
+package net.thumbtack.bank.controllers;
 
 import net.thumbtack.bank.requests.CreateCardRequest;
 import net.thumbtack.bank.requests.DeleteCardRequest;
@@ -38,10 +38,9 @@ public class CardController {
         return ResponseEntity.ok().body(cardService.putMoney(request));
     }
 
-    @PostMapping(value = "/take-money",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<?> takeMoney(@Valid TakeMoneyRequest request) {
+    @PostMapping(value = "/take-money")
+    public ResponseEntity<?> takeMoney(TakeMoneyRequest request) {
+
         return ResponseEntity.ok().body(cardService.takeMoney(request));
     }
 

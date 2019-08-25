@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,9 +41,7 @@ public class CustomerViewController {
     @PostMapping("/create/transaction/{id}")
     public String addCustomerContacts(@ModelAttribute("request") CustomerRequest request,
                                       @PathVariable("id") int carId,
-                                      BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors())
-            return "redirect:/offer/{id}";
+                                      Model model) {
 
         TransactionStatus transactionStatus = customerService.createTransaction(request, carId);
         model.addAttribute("customerId", transactionStatus.getTransaction().getCustomer().getId());
@@ -73,13 +70,20 @@ public class CustomerViewController {
         return "inputCardData";
     }
 
+    @GetMapping("/failure-operation")
+    public String failureOperation() {
+        return "onFailureOperation";
+    }
+
     @GetMapping("/pay-success")
     public String onSuccessOperation() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username);
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.values()[transactionStatuses.size()]);
+
         transactionService.addTransactionStatus(request, username, transactionStatuses.get(0).getTransaction().getId());
-        return "redirect:/transaction-story";
+        return "onSuccessOperation";
     }
 
 }

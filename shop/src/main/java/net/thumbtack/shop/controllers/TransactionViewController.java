@@ -37,7 +37,7 @@ public class TransactionViewController {
     public String freeTransactionsPage(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(username, 0, 8);
+        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(username, 0, 15);
         List<TransactionInfo> transactions = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("freeTransactions", transactions);
@@ -47,6 +47,7 @@ public class TransactionViewController {
     @PostMapping("/pick-up/{id}")
     public String pickUpTransaction(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         transactionService.pickUpTransaction(username, transactionId);
         return "redirect:/transactions-in-progress";
     }
@@ -95,8 +96,8 @@ public class TransactionViewController {
     @GetMapping("/transaction-story/{id}/reject")
     public String rejectTransaction(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
 
+        AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
         transactionService.addTransactionStatus(request, username, transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }

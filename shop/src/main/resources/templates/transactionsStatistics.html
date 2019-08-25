@@ -28,6 +28,7 @@
 window.onload = function() {
     var chartItems1 = /*[[${chartItems1}]]*/ 'default';
     var chartItems2 = /*[[${chartItems2}]]*/ 'default';
+    var chartItems3 = /*[[${chartItems3}]]*/ 'default';
 
     //  Only a test
     chartItems2.forEach(myFunction);
@@ -47,8 +48,7 @@ window.onload = function() {
             cursor: "pointer",
             fontSize: 20,
             itemclick: function (e) {
-                //console.log("legend click: " + e.dataPointIndex);
-                //console.log(e);
+
                 if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
                     e.dataSeries.visible = false;
                 } else {
@@ -71,7 +71,13 @@ window.onload = function() {
     		dataPoints: []
     	},
     	{
-    	    name: "Number of confirmed applications",
+    	    name: "Number of completed transactions",
+    		type: "spline",
+    		showInLegend: true,
+    		dataPoints: []
+    	},
+    	{
+    	    name: "Number of rejected transactions",
     		type: "spline",
     		showInLegend: true,
     		dataPoints: []
@@ -81,6 +87,7 @@ window.onload = function() {
     /* Update dataPoints from AJAX and render the chart*/
     chart.options.data[0].dataPoints = chartItems1;
     chart.options.data[1].dataPoints = chartItems2;
+    chart.options.data[2].dataPoints = chartItems3;
     chart.render();
 
 }
