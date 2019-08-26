@@ -127,6 +127,7 @@ public class Card {
         this.operation = operation;
     }
 
+
     public String generateCardNumber() {
         String cardNumber = "";
         Random random = new Random();
@@ -180,11 +181,10 @@ public class Card {
         return "Card{" +
                 "id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", validity='" + expiryDate + '\'' +
+                ", expiryDate='" + expiryDate + '\'' +
                 ", cvv='" + cvv + '\'' +
                 ", cardHolderName='" + cardHolderName + '\'' +
                 ", balance=" + balance +
-                ", operationsHistory=" + operation +
                 '}';
     }
 }

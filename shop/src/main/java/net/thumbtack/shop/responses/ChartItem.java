@@ -20,6 +20,11 @@ public class ChartItem {
         Y = y;
     }
 
+    public ChartItem(Integer label, int y) {
+        this.label = Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+        Y = y;
+    }
+
     public String getLabel() {
         return label;
     }

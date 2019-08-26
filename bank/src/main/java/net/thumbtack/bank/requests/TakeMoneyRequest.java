@@ -6,19 +6,20 @@ public class TakeMoneyRequest {
     @NotNull
     private String cardNumber;
     @NotNull
-    private String validity;
+    private String expiryDate;
     @NotNull
     private String cvv;
     @NotNull
     private String cardHolderName;
+    @NotNull
     private double money;
 
     public TakeMoneyRequest() {
     }
 
-    public TakeMoneyRequest(@NotNull String cardNumber, @NotNull String validity, @NotNull String cvv, @NotNull String cardHolderName, double money) {
+    public TakeMoneyRequest(@NotNull String cardNumber, @NotNull String expiryDate, @NotNull String cvv, @NotNull String cardHolderName, @NotNull double money) {
         this.cardNumber = cardNumber;
-        this.validity = validity;
+        this.expiryDate = expiryDate;
         this.cvv = cvv;
         this.cardHolderName = cardHolderName;
         this.money = money;
@@ -32,12 +33,12 @@ public class TakeMoneyRequest {
         this.cardNumber = cardNumber;
     }
 
-    public String getValidity() {
-        return validity;
+    public String getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setValidity(String validity) {
-        this.validity = validity;
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public String getCvv() {
@@ -68,7 +69,7 @@ public class TakeMoneyRequest {
     public String toString() {
         return "TakeMoneyRequest{" +
                 "cardNumber='" + cardNumber + '\'' +
-                ", validity='" + validity + '\'' +
+                ", validity='" + expiryDate + '\'' +
                 ", cvv='" + cvv + '\'' +
                 ", cardHolderName='" + cardHolderName + '\'' +
                 ", money=" + money +

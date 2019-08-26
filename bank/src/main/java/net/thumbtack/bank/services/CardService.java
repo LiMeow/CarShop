@@ -54,7 +54,7 @@ public class CardService {
         LOGGER.debug("CardRepository take money from Card with number '{}'", request.getCardNumber());
 
         Card card = findCardByNumber(request.getCardNumber());
-        checkCard(card, request.getValidity(), request.getCvv(), request.getCardHolderName());
+        checkCard(card, request.getExpiryDate(), request.getCvv(), request.getCardHolderName());
 
         if (card.getBalance() < request.getMoney())
             throw new BankException(ErrorCode.NOT_ENOUGH_MONEY);
@@ -80,6 +80,7 @@ public class CardService {
 
     private Card findCardByNumber(String cardNumber) {
         Card card = cardRepository.findByCardNumber(cardNumber);
+
         if (card == null) {
             LOGGER.error("Unable to find card with number '{}'", cardNumber);
             throw new BankException(ErrorCode.CARD_NOT_EXISTS, String.valueOf(cardNumber));
@@ -99,8 +100,9 @@ public class CardService {
             throw new BankException(ErrorCode.INVALID_CARD_HOLDER_NAME);
     }
 
-    private void logOperation(Card card, CardOperation operation, String... params) {
-        cardOperationRepository.save(new Operation(card, String.format(operation.getMessage(), params)));
+    private void logOperation(Card card, CardOperation cardOperation, String... params) {
+        Operation operation = new Operation(card, String.format(cardOperation.getMessage(), params));
+        cardOperationRepository.save(operation);
     }
 
     private CardInfo getCardInfo(Card card) {

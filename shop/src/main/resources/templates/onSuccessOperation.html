@@ -10,18 +10,15 @@
 <body>
 <div class="container text-center center">
     <div class="py-5">
-        <img th:src="@{/img/bank.png}" width="80" height="80">
+        <img th:src="@{/img/UI/successPig.png}" width="120">
         <h2>Bank</h2>
     </div>
 
     <div class="justify-content-center">
-        <h5 th:text="${operationStatus.message}"></h5>
+        <h5>Operation completed successfully</h5>
         <div class="mt-3">
-            <div th:if="${operationStatus.name() == 'SUCCESS'}">
-                <a th:href="@{http://127.0.0.1:8080/pay-success}" class="btn btn-lg ok-btn" href="#">OK</a>
-            </div>
-            <div th:if="${operationStatus.name() == 'FAILURE'}">
-                <a th:href="@{http://127.0.0.1:8080/transaction-story}" class="btn btn-lg ok-btn" href="#">OK</a>
+            <div>
+                <a th:href="@{http://127.0.0.1:8080/transaction-story}" class="btn btn-lg btn-success" href="#">OK</a>
             </div>
         </div>
     </div>
@@ -30,8 +27,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-
 </body>
 </html>

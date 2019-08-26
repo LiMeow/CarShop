@@ -60,7 +60,6 @@ public class CarController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteCar(@PathVariable("id") int carId) {
         carService.deleteCar(carId);
-
         return ResponseEntity.noContent().build();
     }
 
