@@ -4,7 +4,7 @@ create schema public;
 CREATE TABLE card( 	
 	id serial primary key,
 	card_number text unique not null,
-	validity text not null,
+	expiry_date text not null,
 	cvv text not null,
 	card_holder_name text not null,
 	balance double precision not null

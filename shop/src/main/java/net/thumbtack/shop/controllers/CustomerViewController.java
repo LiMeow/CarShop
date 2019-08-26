@@ -74,7 +74,7 @@ public class CustomerViewController {
     }
 
     @GetMapping("/pay-success")
-    public String onSuccesOperation() {
+    public String onSuccessOperation() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username);
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.values()[transactionStatuses.size()]);

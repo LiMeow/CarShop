@@ -70,7 +70,7 @@ public class TransactionService {
     public Transaction getTransactionById(String username, int transactionId) {
         Transaction transaction = findTransactionById(transactionId);
 
-        if (!transaction.getCustomer().getUser().getUsername().equals(username) && !transaction.getManager().getUsername().equals(username))
+        if (!transaction.getManager().getUsername().equals(username) && (transaction.getCustomer().getUser() != null && !transaction.getCustomer().getUser().getUsername().equals(username)))
             throw new CarShopException(ErrorCode.NOT_ENOUGH_AUTHORITY, username);
 
         return transaction;

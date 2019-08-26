@@ -17,7 +17,7 @@ public class HomeViewController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        model.addAttribute("cars", carService.getCars());
+        model.addAttribute("cars", carService.getAvailableCars());
         return "index";
     }
 

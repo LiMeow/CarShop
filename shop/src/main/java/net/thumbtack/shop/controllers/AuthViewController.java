@@ -9,7 +9,6 @@ import net.thumbtack.shop.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +34,7 @@ public class AuthViewController {
     }
 
     @PostMapping("/sgnIn")
-    public String signIn(@ModelAttribute("authRequest") AuthRequest authRequest, BindingResult bindingResult, HttpServletResponse response) {
+    public String signIn(@ModelAttribute("authRequest") AuthRequest authRequest, HttpServletResponse response) {
 
         User user = authService.signIn(authRequest);
         String token = jwtTokenService.createToken(user);
@@ -64,7 +63,7 @@ public class AuthViewController {
     }
 
     @PostMapping("/sgnUp")
-    public String signUp(@ModelAttribute("authRequest") AuthRequest authRequest, BindingResult bindingResult, HttpServletResponse response) {
+    public String signUp(@ModelAttribute("authRequest") AuthRequest authRequest, HttpServletResponse response) {
 
         User user = authService.signUp(authRequest);
         String token = jwtTokenService.createToken(user);

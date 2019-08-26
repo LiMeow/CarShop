@@ -71,8 +71,7 @@ public class Operation {
         Operation operation1 = (Operation) o;
         return getId() == operation1.getId() &&
                 getCard().equals(operation1.getCard()) &&
-                getOperation().equals(operation1.getOperation()) &&
-                getDate().equals(operation1.getDate());
+                getOperation().equals(operation1.getOperation());
     }
 
     @Override
