@@ -29,7 +29,7 @@ public class CarServiceTests {
     private CarRepository carRepository;
 
     @InjectMocks
-    private CarService carService = new CarService();
+    private CarService carService = new CarService(carRepository);
 
     @Test
     public void testCreateCar() {

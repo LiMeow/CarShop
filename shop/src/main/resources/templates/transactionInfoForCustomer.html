@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>CarShop</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<header>
+    <div th:insert="~{header :: header}"></div>
+</header>
+
+<div class="my-5" sec:authorize="isAuthenticated()">
+    <div class="row justify-content-center">
+        <div class="col-xs-9 col-sm-3 col-md-3 ">
+            <div class="card shadow-sm" height="auto">
+                <img th:src="@{${car.picture}}" class="bd-placeholder-img card-img-top">
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li th:text="'Model: ' + ${car.model}"></li>
+                        <li th:text="'Price: ' + ${car.price}"></li>
+                        <li th:text="'Production: ' + ${car.production}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9 col-sm-8 col-md-8">
+            <table class="table table-hover text-center  position-relative">
+                <tr>
+                    <th></th>
+                    <th>Number</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+                <tr th:each="transactionInfo,iteration : ${statuses}">
+                    <td>
+                        <a href="#" class="stretched-link"></a>
+                    </td>
+                    <td th:text="${iteration.count}"></td>
+                    <td th:text="${transactionInfo.date}"></td>
+                    <td>
+                        <button class="btn status-btn btn-block " th:text="${transactionInfo.status}"></button>
+                    </td>
+                    <td th:text="${transactionInfo.status.description}"></td>
+                </tr>
+            </table>
+            <div class="btn-group btn-block justify-content-center">
+
+                <div th:if="${statuses[statuses.size()-1].status.name() == 'PAYMENT_EXPECTED'}">
+                    <a th:href="@{'{transactionId}/pay' (transactionId=${transaction.id})}"
+                       class="btn btn-lg sign-btn mt-4" href="#">To pay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
