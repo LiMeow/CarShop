@@ -40,16 +40,18 @@ public class AuthService {
             LOGGER.error("Can't signUp User  {}", user);
             throw new CarShopException(ErrorCode.USER_ALREADY_EXISTS, request.getUsername());
         }
-        if (request.getCustomerId() != 0) {
-            Customer customer = customerRepository.findById(request.getCustomerId()).orElse(null);
 
+        if (request.getCustomerId() == 0)
+            userRepository.save(user);
+        else {
+            Customer customer = customerRepository.findById(request.getCustomerId()).orElse(null);
             if (customer == null)
                 throw new CarShopException(ErrorCode.CUSTOMER_NOT_EXISTS, String.valueOf(request.getCustomerId()));
 
             customer.setUser(user);
+            userRepository.save(user);
             customerRepository.save(customer);
         }
-        userRepository.save(user);
         return user;
     }
 
