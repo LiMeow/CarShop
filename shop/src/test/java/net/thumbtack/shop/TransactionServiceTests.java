@@ -3,9 +3,9 @@ package net.thumbtack.shop;
 import net.thumbtack.shop.exceptions.CarShopException;
 import net.thumbtack.shop.exceptions.ErrorCode;
 import net.thumbtack.shop.models.*;
-import net.thumbtack.shop.repositories.ManagerRepository;
 import net.thumbtack.shop.repositories.TransactionRepository;
 import net.thumbtack.shop.repositories.TransactionStatusRepository;
+import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
 import net.thumbtack.shop.services.TransactionService;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionServiceTests {
     @Mock
-    private ManagerRepository managerRepository;
+    private UserRepository userRepository;
     @Mock
     private TransactionRepository transactionRepository;
     @Mock
@@ -41,38 +41,38 @@ public class TransactionServiceTests {
     public void testPickUpTransaction() {
         Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer = new Customer(1, "Name", "+12345678912");
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
         Transaction transaction = new Transaction(1, car, customer);
         Transaction updatedTransaction = new Transaction(1, car, customer, manager);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(1)).thenReturn(java.util.Optional.of(transaction));
         when(transactionRepository.save(transaction)).thenReturn(transaction);
 
         assertEquals(updatedTransaction, transactionService.pickUpTransaction(manager.getUsername(), 1));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(1);
         verify(transactionRepository).save(updatedTransaction);
     }
 
     @Test
     public void testPickUpTransactionByNonExistingManager() {
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
         try {
             transactionService.pickUpTransaction("manager1", 1);
             fail();
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
     }
 
     @Test
     public void testPickUpNonExistingTransaction() {
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(1)).thenReturn(java.util.Optional.empty());
         try {
             transactionService.pickUpTransaction(manager.getUsername(), 1);
@@ -80,7 +80,7 @@ public class TransactionServiceTests {
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.TRANSACTION_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(1);
     }
 
@@ -90,20 +90,20 @@ public class TransactionServiceTests {
 
         Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer = new Customer(1, "Name", "+12345678912");
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
         Transaction transaction = new Transaction(1, car, customer);
         TransactionStatus transactionStatus = new TransactionStatus(request.getStatusName(), transaction);
         List<TransactionStatus> transactionStatuses = Collections.singletonList(transactionStatus);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(1)).thenReturn(java.util.Optional.of(transaction));
         when(statusRepository.save(transactionStatus)).thenReturn(transactionStatus);
         when(statusRepository.findAllByTransactionId(1, Sort.by("date"))).thenReturn(transactionStatuses);
 
         assertEquals(transactionStatuses, transactionService.addTransactionStatus(request, manager.getUsername(), 1));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(1);
         verify(statusRepository).save(transactionStatus);
     }
@@ -112,23 +112,23 @@ public class TransactionServiceTests {
     public void testAddTransactionStatusByNonExistingManager() {
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
 
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
         try {
             transactionService.addTransactionStatus(request, "manager1", 1);
             fail();
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
 
     }
 
     @Test
     public void testAddStatusToNonExistingTransaction() {
         AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(1)).thenReturn(java.util.Optional.empty());
 
         try {
@@ -137,7 +137,7 @@ public class TransactionServiceTests {
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.TRANSACTION_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(1);
     }
 
@@ -146,7 +146,7 @@ public class TransactionServiceTests {
         int page = 0;
         int size = 3;
         Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
         Car car1 = new Car(1, "picture1.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer1 = new Customer(1, "Name1", "+12345678911");
@@ -160,30 +160,30 @@ public class TransactionServiceTests {
 
         List<TransactionStatus> freeTransactions = Arrays.asList(transactionStatus1, transactionStatus2);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(statusRepository.findAllFree(pageable)).thenReturn(freeTransactions);
 
         assertEquals(freeTransactions, transactionService.getAllFreeTransactions(manager.getUsername(), page, size));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(statusRepository).findAllFree(pageable);
     }
 
     @Test
     public void testGetAllFreeTransactionsByNonExistingManager() {
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
         try {
             transactionService.getAllFreeTransactions("manager1", 0, 1);
             fail();
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
     }
 
     @Test
     public void testGetAllTransactionByManager() {
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
         Car car1 = new Car(1, "picture1.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer1 = new Customer(1, "Name1", "+12345678911");
@@ -197,18 +197,18 @@ public class TransactionServiceTests {
 
         List<TransactionStatus> transactionsStatuses = Arrays.asList(transactionStatus1, transactionStatus2);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(statusRepository.findAllLastTransactionsStatusesByManager(manager.getId())).thenReturn(transactionsStatuses);
 
         assertEquals(transactionsStatuses, transactionService.getAllTransactionByManager(manager.getUsername()));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(statusRepository).findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
     @Test
     public void testGetAllTransactionByNonExistingManager() {
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
 
         try {
             transactionService.getAllTransactionByManager("manager1");
@@ -216,7 +216,7 @@ public class TransactionServiceTests {
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
 
     }
 
@@ -224,7 +224,7 @@ public class TransactionServiceTests {
     public void testGetTransactionStatuses() {
         Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer = new Customer(1, "Name", "+12345678912");
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
         Transaction transaction = new Transaction(1, car, customer);
 
         TransactionStatus status1 = new TransactionStatus(StatusName.APPLICATION_CONFIRMATION, transaction);
@@ -232,13 +232,13 @@ public class TransactionServiceTests {
         TransactionStatus status3 = new TransactionStatus(StatusName.TEST_DRIVE, transaction);
         List<TransactionStatus> transactionStatuses = Arrays.asList(status1, status2, status3);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(transaction.getId())).thenReturn(java.util.Optional.of(transaction));
         when(statusRepository.findAllByTransactionId(transaction.getId(), Sort.by("date"))).thenReturn(transactionStatuses);
 
         assertEquals(transactionStatuses, transactionService.getTransactionStatuses(manager.getUsername(), transaction.getId()));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(transaction.getId());
         verify(statusRepository).findAllByTransactionId(transaction.getId(), Sort.by("date"));
 
@@ -246,21 +246,21 @@ public class TransactionServiceTests {
 
     @Test
     public void testGetTransactionStatusesByNonExistingManager() {
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
         try {
             transactionService.getTransactionStatuses("manager1", 1);
             fail();
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
     }
 
     @Test
     public void testGetStatusesOfNonExistingTransaction() {
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(transactionRepository.findById(1)).thenReturn(java.util.Optional.empty());
 
         try {
@@ -269,7 +269,7 @@ public class TransactionServiceTests {
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.TRANSACTION_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(transactionRepository).findById(1);
     }
 

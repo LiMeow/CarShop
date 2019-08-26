@@ -1,7 +1,7 @@
 package net.thumbtack.shop.controllers.rest;
 
 import net.thumbtack.shop.jwt.JwtTokenService;
-import net.thumbtack.shop.models.Manager;
+import net.thumbtack.shop.models.User;
 import net.thumbtack.shop.requests.AuthRequest;
 import net.thumbtack.shop.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,9 @@ public class AuthController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUp(@Valid @RequestBody AuthRequest request,
                                     HttpServletResponse  response) {
-        Manager manager = authService.signUp(request);
-        String token = jwtTokenService.createToken(manager);
+
+        User user = authService.signUp(request);
+        String token = jwtTokenService.createToken(user);
         Cookie cookie=new Cookie("accessToken",token);
 
         cookie.isHttpOnly();
@@ -47,8 +48,9 @@ public class AuthController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signIn(@Valid @RequestBody AuthRequest request,
                                     HttpServletResponse  response) {
-        Manager manager = authService.signIn(request);
-        String token = jwtTokenService.createToken(manager);
+
+        User user = authService.signIn(request);
+        String token = jwtTokenService.createToken(user);
         Cookie cookie=new Cookie("accessToken",token);
 
         cookie.isHttpOnly();

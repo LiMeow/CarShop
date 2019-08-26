@@ -4,25 +4,30 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "manager")
-public class Manager {
+@Table(name = "shop_user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
     private String password;
+    @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    public Manager() {
+
+    public User() {
     }
 
-    public Manager(int id, String username, String password) {
+    public User(int id, String username, String password, UserRole userRole) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.userRole = userRole;
     }
 
-    public Manager(String username, String password) {
-        this(0, username, password);
+    public User(String username, String password, UserRole userRole) {
+        this(0, username, password, userRole);
     }
 
     public int getId() {
@@ -49,27 +54,37 @@ public class Manager {
         this.password = password;
     }
 
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Manager)) return false;
-        Manager manager = (Manager) o;
-        return getId() == manager.getId() &&
-                getUsername().equals(manager.getUsername()) &&
-                getPassword().equals(manager.getPassword());
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() &&
+                getUsername().equals(user.getUsername()) &&
+                getPassword().equals(user.getPassword()) &&
+                getUserRole() == user.getUserRole();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getPassword());
+        return Objects.hash(getId(), getUsername(), getPassword(), getUserRole());
     }
 
     @Override
     public String toString() {
-        return "Manager{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", userType=" + userRole +
                 '}';
     }
 }

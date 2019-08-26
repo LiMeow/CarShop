@@ -21,6 +21,11 @@
         <input type="password" name="password" id="password" class="form-control font-weight-normal"
                placeholder="Password"
                required>
+        <input type="text" name="userRole" class="sr-only" data-th-value="${userRole.name()}">
+
+        <div th:if="${userRole.name() == 'ROLE_CUSTOMER'}">
+            <input type="text" name="customerId" class="sr-only" data-th-value="${customerId}">
+        </div>
 
         <button class="btn btn-lg btn-block sign-btn mt-4" type="submit">Sign Up</button>
     </form>

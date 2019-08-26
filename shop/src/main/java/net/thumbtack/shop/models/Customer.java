@@ -10,6 +10,11 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String name;
     private String phone;
     private String email;
@@ -64,12 +69,21 @@ public class Customer {
         this.email = email;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
         Customer customer = (Customer) o;
         return getId() == customer.getId() &&
+                Objects.equals(getUser(), customer.getUser()) &&
                 getName().equals(customer.getName()) &&
                 getPhone().equals(customer.getPhone()) &&
                 Objects.equals(getEmail(), customer.getEmail());
@@ -77,16 +91,6 @@ public class Customer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getPhone(), getEmail());
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return Objects.hash(getId(), getUser(), getName(), getPhone(), getEmail());
     }
 }

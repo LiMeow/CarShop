@@ -2,9 +2,10 @@ package net.thumbtack.shop;
 
 import net.thumbtack.shop.exceptions.CarShopException;
 import net.thumbtack.shop.exceptions.ErrorCode;
-import net.thumbtack.shop.models.Manager;
 import net.thumbtack.shop.models.StatusName;
-import net.thumbtack.shop.repositories.ManagerRepository;
+import net.thumbtack.shop.models.User;
+import net.thumbtack.shop.models.UserRole;
+import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.repositories.chartRepository.ChartRepositoryCustom;
 import net.thumbtack.shop.responses.ChartItem;
 import net.thumbtack.shop.services.ChartService;
@@ -28,37 +29,37 @@ public class ChartServiceTests {
     @Mock
     private ChartRepositoryCustom chartRepository;
     @Mock
-    private ManagerRepository managerRepository;
+    private UserRepository userRepository;
     @InjectMocks
     private ChartService chartService;
 
     @Test
     public void testGetChartData() {
-        Manager manager = new Manager(1, "manager", "password");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
         ChartItem chartItem1 = new ChartItem("April", 1);
         ChartItem chartItem2 = new ChartItem("May", 2);
         ChartItem chartItem3 = new ChartItem("June", 3);
         List<ChartItem> chartItems = Arrays.asList(chartItem1, chartItem2, chartItem3);
 
-        when(managerRepository.findByUsername(manager.getUsername())).thenReturn(manager);
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
         when(chartRepository.findChartItems(manager.getId(), StatusName.CONFIRMED)).thenReturn(chartItems);
 
         assertEquals(chartItems, chartService.getChartData(manager.getUsername(), StatusName.CONFIRMED));
 
-        verify(managerRepository).findByUsername(manager.getUsername());
+        verify(userRepository).findManagerByUsername(manager.getUsername());
         verify(chartRepository).findChartItems(manager.getId(), StatusName.CONFIRMED);
     }
 
     @Test
     public void testGetChartDataByNonExistingManager() {
-        when(managerRepository.findByUsername("manager1")).thenReturn(null);
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
         try {
             chartService.getChartData("manager1", StatusName.CONFIRMED);
             fail();
         } catch (CarShopException ex) {
             assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
         }
-        verify(managerRepository).findByUsername("manager1");
+        verify(userRepository).findManagerByUsername("manager1");
     }
 }

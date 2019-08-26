@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(authFilter, FilterSecurityInterceptor.class);
 
         http
-                .authorizeRequests().antMatchers("/signup", "/signin").permitAll()
+                .authorizeRequests().antMatchers("/manager/signup", "/customer/*/signup", "/signin").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and()
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/create/transaction/**",
                 "/back").permitAll()
                 .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeRequests().anyRequest().hasAuthority("MANAGER");
     }
 
 

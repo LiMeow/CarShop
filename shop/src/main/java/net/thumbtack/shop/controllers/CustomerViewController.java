@@ -1,5 +1,6 @@
 package net.thumbtack.shop.controllers;
 
+import net.thumbtack.shop.models.TransactionStatus;
 import net.thumbtack.shop.requests.CustomerRequest;
 import net.thumbtack.shop.services.CarService;
 import net.thumbtack.shop.services.CustomerService;
@@ -32,11 +33,15 @@ public class CustomerViewController {
     @PostMapping("/create/transaction/{id}")
     public String addCustomerContacts(@ModelAttribute("request") CustomerRequest request,
                                       @PathVariable("id") int carId,
-                                      BindingResult bindingResult) {
+                                      BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
             return "redirect:/offer/{id}";
-        System.out.println(request.getName());
-        customerService.createTransaction(request, carId);
-        return "redirect:/";
+
+        TransactionStatus transactionStatus = customerService.createTransaction(request, carId);
+        model.addAttribute("customerId", transactionStatus.getTransaction().getCustomer().getId());
+
+        return "customerRegistrationRequest";
     }
+
+
 }

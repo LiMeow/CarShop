@@ -2,12 +2,12 @@ package net.thumbtack.shop.services;
 
 import net.thumbtack.shop.exceptions.CarShopException;
 import net.thumbtack.shop.exceptions.ErrorCode;
-import net.thumbtack.shop.models.Manager;
 import net.thumbtack.shop.models.Transaction;
 import net.thumbtack.shop.models.TransactionStatus;
-import net.thumbtack.shop.repositories.ManagerRepository;
+import net.thumbtack.shop.models.User;
 import net.thumbtack.shop.repositories.TransactionRepository;
 import net.thumbtack.shop.repositories.TransactionStatusRepository;
+import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
 import net.thumbtack.shop.responses.TransactionInfo;
 import org.slf4j.Logger;
@@ -24,24 +24,25 @@ import java.util.List;
 
 @Service
 public class TransactionService {
-    private final ManagerRepository managerRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionStatusRepository transactionStatusRepository;
+    private final UserRepository userRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
     @Autowired
-    public TransactionService(ManagerRepository managerRepository,
-                              TransactionRepository transactionRepository,
-                              TransactionStatusRepository transactionStatusRepository) {
-        this.managerRepository = managerRepository;
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            TransactionStatusRepository transactionStatusRepository,
+            UserRepository userRepository) {
         this.transactionRepository = transactionRepository;
         this.transactionStatusRepository = transactionStatusRepository;
+        this.userRepository = userRepository;
     }
 
     public Transaction pickUpTransaction(String username, int transactionId) {
         LOGGER.debug("TransactionService pick up transaction with id '{}' by manager with username '{}'", transactionId, username);
 
-        Manager manager = findManagerByUsername(username);
+        User manager = findManagerByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
 
         transaction.setManager(manager);
@@ -74,7 +75,7 @@ public class TransactionService {
     public List<TransactionStatus> getAllTransactionByManager(String username) {
         LOGGER.debug("TransactionService get all transactions by manager with username '{}'", username);
 
-        Manager manager = findManagerByUsername(username);
+        User manager = findManagerByUsername(username);
         return transactionStatusRepository.findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
@@ -103,8 +104,8 @@ public class TransactionService {
     }
 
 
-    private Manager findManagerByUsername(String username) {
-        Manager manager = managerRepository.findByUsername(username);
+    private User findManagerByUsername(String username) {
+        User manager = userRepository.findManagerByUsername(username);
         if (manager == null) {
             LOGGER.error("Unable to find manager with username '{}'", username);
             throw new CarShopException(ErrorCode.USER_NOT_EXISTS, username);
