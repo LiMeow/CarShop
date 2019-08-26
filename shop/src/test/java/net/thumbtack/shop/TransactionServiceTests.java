@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -158,8 +159,8 @@ public class TransactionServiceTests {
         TransactionStatus updatedStatus = new TransactionStatus(0, status.getDate(), status.getStatusName(), request.getDescription(), transaction);
 
         when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
-        when(transactionRepository.findById(transaction.getId())).thenReturn(java.util.Optional.of(transaction));
-        when(statusRepository.findById(status.getId())).thenReturn(java.util.Optional.of(updatedStatus));
+        when(transactionRepository.findById(transaction.getId())).thenReturn(Optional.of(transaction));
+        when(statusRepository.findById(status.getId())).thenReturn(Optional.of(updatedStatus));
         when(statusRepository.save(updatedStatus)).thenReturn(updatedStatus);
 
         assertEquals(updatedStatus, transactionService.editTransactionStatusDescription(manager.getUsername(), transaction.getId(), status.getId(), request));
@@ -168,6 +169,61 @@ public class TransactionServiceTests {
         verify(transactionRepository).findById(transaction.getId());
         verify(statusRepository).findById(status.getId());
         verify(statusRepository).save(updatedStatus);
+    }
+
+    @Test
+    public void testEditTransactionStatusDescriptionByNonExistingManager() {
+        EditTransactionStatusDescriptionRequest request = new EditTransactionStatusDescriptionRequest("New Description");
+
+        when(userRepository.findManagerByUsername("manager1")).thenReturn(null);
+        try {
+            transactionService.editTransactionStatusDescription("manager1", 1, 1, request);
+            fail();
+        } catch (CarShopException ex) {
+            assertEquals(ErrorCode.USER_NOT_EXISTS, ex.getErrorCode());
+        }
+        verify(userRepository).findManagerByUsername("manager1");
+    }
+
+    @Test
+    public void testEditStatusDescriptionToNonExistingTransaction() {
+        EditTransactionStatusDescriptionRequest request = new EditTransactionStatusDescriptionRequest("New Description");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
+
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
+        when(transactionRepository.findById(1)).thenReturn(Optional.empty());
+        try {
+            transactionService.editTransactionStatusDescription(manager.getUsername(), 1, 1, request);
+            fail();
+        } catch (CarShopException ex) {
+            assertEquals(ErrorCode.TRANSACTION_NOT_EXISTS, ex.getErrorCode());
+        }
+        verify(userRepository).findManagerByUsername(manager.getUsername());
+        verify(transactionRepository).findById(1);
+    }
+
+    @Test
+    public void testEditDescriptionToNonExistingStatus() {
+        EditTransactionStatusDescriptionRequest request = new EditTransactionStatusDescriptionRequest("New Description");
+        Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
+        Customer customer = new Customer(1, "Name", "+12345678912");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
+
+        Transaction transaction = new Transaction(1, car, customer);
+
+        when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
+        when(transactionRepository.findById(transaction.getId())).thenReturn(Optional.of(transaction));
+        when(statusRepository.findById(1)).thenReturn(Optional.empty());
+
+        try {
+            transactionService.editTransactionStatusDescription(manager.getUsername(), 1, 1, request);
+            fail();
+        } catch (CarShopException ex) {
+            assertEquals(ErrorCode.TRANSACTION_STATUS_NOT_EXISTS, ex.getErrorCode());
+        }
+        verify(userRepository).findManagerByUsername(manager.getUsername());
+        verify(transactionRepository).findById(transaction.getId());
+        verify(statusRepository).findById(1);
     }
 
     @Test

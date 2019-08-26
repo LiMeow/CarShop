@@ -102,7 +102,7 @@ public class TransactionService {
         TransactionStatus status = transactionStatusRepository.findById(statusId).orElse(null);
 
         if (status == null)
-            throw new CarShopException(ErrorCode.TRANSACTION__STATUS_NOT_EXISTS, String.valueOf(statusId));
+            throw new CarShopException(ErrorCode.TRANSACTION_STATUS_NOT_EXISTS, String.valueOf(statusId));
 
         status.setDescription(request.getDescription());
         transactionStatusRepository.save(status);
