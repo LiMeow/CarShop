@@ -8,6 +8,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR("", "'%s'"),
     NOT_ENOUGH_AUTHORITY("username", "User with username '%s' doesn't have access to this information."),
     TRANSACTION_NOT_EXISTS("transactionId","Transaction with id '%s' not exists" ),
+    TRANSACTION__STATUS_NOT_EXISTS("statusId", "Transaction status with id '%s' not exists"),
     USER_ALREADY_EXISTS("username", "User with username '%s' already exists."),
     USER_NOT_EXISTS("id", "User with username '%s' not exists."),
     WRONG_OR_EMPTY_REQUEST("json", "Wrong or empty request"),

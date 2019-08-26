@@ -3,6 +3,7 @@ package net.thumbtack.shop.controllers;
 import net.thumbtack.shop.models.StatusName;
 import net.thumbtack.shop.models.TransactionStatus;
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
 import net.thumbtack.shop.requests.UpdateCarRequest;
 import net.thumbtack.shop.responses.ChartItem;
 import net.thumbtack.shop.responses.TransactionInfo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -70,7 +72,6 @@ public class TransactionViewController {
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
         List<TransactionInfo> statuses = transactionService.getTransactionInfoList(transactionStatuses);
 
-        model.addAttribute("transactionId", transactionId);
         model.addAttribute("statuses", statuses);
         return "transactionInfoForManager";
     }
@@ -90,6 +91,17 @@ public class TransactionViewController {
 
 
         transactionService.addTransactionStatus(request, username, transactionId);
+        return "redirect:/transaction-story/" + transactionId;
+    }
+
+    @PostMapping("/transaction-story/{transactionId}/status/{statusId}/edit-description")
+    public String editTransactionStatusDescription(@PathVariable("transactionId") int transactionId,
+                                                   @PathVariable("statusId") int statusId,
+                                                   @ModelAttribute("request") EditTransactionStatusDescriptionRequest request) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        transactionService.editTransactionStatusDescription(username, transactionId, statusId, request);
+
         return "redirect:/transaction-story/" + transactionId;
     }
 

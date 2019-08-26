@@ -1,11 +1,14 @@
 package net.thumbtack.shop.controllers.rest;
 
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
 import net.thumbtack.shop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class TransactionsController {
@@ -50,6 +53,17 @@ public class TransactionsController {
         return ResponseEntity.ok().body(transactionService.addTransactionStatus(request, username, transactionId));
     }
 
+    @PutMapping(value = "/{username}/transactions/{transactionId}/statuses/{statusId}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> editTransactionStatusDescription(@Valid @RequestBody EditTransactionStatusDescriptionRequest request,
+                                                              @PathVariable("username") String username,
+                                                              @PathVariable("transactionId") int transactionId,
+                                                              @PathVariable("statusId") int statusId) {
+
+        return ResponseEntity.ok().body(transactionService.editTransactionStatusDescription(username, transactionId, statusId, request));
+    }
+
     @GetMapping(value = "/{username}/transactions/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +71,5 @@ public class TransactionsController {
                                                     @PathVariable("id") int transactionId) {
         return ResponseEntity.ok().body(transactionService.getTransactionStatuses(username, transactionId));
     }
-
-
 
 }
