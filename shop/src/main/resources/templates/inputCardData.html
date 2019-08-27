@@ -35,9 +35,10 @@
                        placeholder="FIRSTNAME LASTNAME" required>
             </div>
             <input type="text" name="money" id="money" class="sr-only" data-th-value="${price}">
+            <input type="text" name="transactionId" id="transactionId" class="sr-only" data-th-value="${transactionId}">
         </div>
         <div class=" text-center">
-            <a class="btn btn-lg btn-danger" href="#">Cancel</a>
+            <a th:href="@{/transaction-story}" class="btn btn-lg btn-danger" href="#">Cancel</a>
             <button class="btn btn-lg sign-btn" type="submit">Pay now</button>
         </div>
     </form>

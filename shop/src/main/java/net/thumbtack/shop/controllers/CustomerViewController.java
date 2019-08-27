@@ -1,8 +1,6 @@
 package net.thumbtack.shop.controllers;
 
-import net.thumbtack.shop.models.StatusName;
 import net.thumbtack.shop.models.TransactionStatus;
-import net.thumbtack.shop.requests.AddTransactionStatusRequest;
 import net.thumbtack.shop.requests.CustomerRequest;
 import net.thumbtack.shop.responses.TransactionInfo;
 import net.thumbtack.shop.services.CarService;
@@ -62,9 +60,11 @@ public class CustomerViewController {
         return "transactionInfoForCustomer";
     }
 
-    @GetMapping("/{transactionId}/pay")
+    @GetMapping("/transactions/{transactionId}/pay")
     public String payPage(@PathVariable("transactionId") int transactionId, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        model.addAttribute("transactionId", transactionId);
         model.addAttribute("price", transactionService.getTransactionById(username, transactionId).getCar().getPrice());
 
         return "inputCardData";
@@ -75,14 +75,10 @@ public class CustomerViewController {
         return "onFailureOperation";
     }
 
-    @GetMapping("/pay-success")
-    public String onSuccessOperation() {
+    @GetMapping("/transactions/{transactionId}/pay-success")
+    public String onSuccessOperation(@PathVariable("transactionId") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username);
-        AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.values()[transactionStatuses.size()]);
-
-        transactionService.addTransactionStatus(request, username, transactionStatuses.get(0).getTransaction().getId());
+        transactionService.addNextTransactionStatus(username, transactionId);
         return "onSuccessOperation";
     }
 

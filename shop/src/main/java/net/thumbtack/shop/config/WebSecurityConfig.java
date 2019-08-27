@@ -74,8 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers(
                 "/transaction-story",
-                "/*/pay",
-                "/pay-success",
+                "/transactions/**/pay",
+                "/transactions/**/pay-success",
                 "/success-operation",
                 "/failure-operation").hasAuthority("ROLE_CUSTOMER")
                 .and()

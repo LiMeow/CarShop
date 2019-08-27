@@ -2,9 +2,7 @@ package net.thumbtack.shop.controllers;
 
 import net.thumbtack.shop.models.StatusName;
 import net.thumbtack.shop.models.TransactionStatus;
-import net.thumbtack.shop.requests.AddTransactionStatusRequest;
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
-import net.thumbtack.shop.requests.UpdateCarRequest;
 import net.thumbtack.shop.responses.ChartItem;
 import net.thumbtack.shop.responses.TransactionInfo;
 import net.thumbtack.shop.services.CarService;
@@ -78,20 +76,9 @@ public class TransactionViewController {
     }
 
     @GetMapping("/transaction-story/{id}/add-status")
-    public String addTransactionStatus(@PathVariable("id") int transactionId) {
+    public String addNextTransactionStatus(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
-        StatusName nextStatus = StatusName.values()[transactionStatuses.size()];
-        AddTransactionStatusRequest request = new AddTransactionStatusRequest(nextStatus);
-
-        if (nextStatus.equals(StatusName.CONTRACT_PREPARATION))
-            carService.updateCar(
-                    new UpdateCarRequest(false),
-                    transactionStatuses.get(0).getTransaction().getCar().getId());
-
-
-        transactionService.addTransactionStatus(request, username, transactionId);
+        transactionService.addNextTransactionStatus(username, transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
 
@@ -109,9 +96,7 @@ public class TransactionViewController {
     @GetMapping("/transaction-story/{id}/reject")
     public String rejectTransaction(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        AddTransactionStatusRequest request = new AddTransactionStatusRequest(StatusName.REJECTED);
-        transactionService.addTransactionStatus(request, username, transactionId);
+        transactionService.rejectTransaction(username, transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
 

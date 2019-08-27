@@ -2,15 +2,8 @@ package net.thumbtack.shop.services;
 
 import net.thumbtack.shop.exceptions.CarShopException;
 import net.thumbtack.shop.exceptions.ErrorCode;
-import net.thumbtack.shop.models.Customer;
-import net.thumbtack.shop.models.Transaction;
-import net.thumbtack.shop.models.TransactionStatus;
-import net.thumbtack.shop.models.User;
-import net.thumbtack.shop.repositories.CustomerRepository;
-import net.thumbtack.shop.repositories.TransactionRepository;
-import net.thumbtack.shop.repositories.TransactionStatusRepository;
-import net.thumbtack.shop.repositories.UserRepository;
-import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.models.*;
+import net.thumbtack.shop.repositories.*;
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
 import net.thumbtack.shop.responses.TransactionInfo;
 import org.slf4j.Logger;
@@ -27,6 +20,7 @@ import java.util.List;
 
 @Service
 public class TransactionService {
+    private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionStatusRepository transactionStatusRepository;
@@ -35,9 +29,10 @@ public class TransactionService {
 
     @Autowired
     public TransactionService(
-            CustomerRepository customerRepository, TransactionRepository transactionRepository,
+            CarRepository carRepository, CustomerRepository customerRepository, TransactionRepository transactionRepository,
             TransactionStatusRepository transactionStatusRepository,
             UserRepository userRepository) {
+        this.carRepository = carRepository;
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
         this.transactionStatusRepository = transactionStatusRepository;
@@ -56,17 +51,36 @@ public class TransactionService {
         return transaction;
     }
 
-    public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, String username, int transactionId) {
-        LOGGER.debug("TransactionService  add status '{}' to transaction with id '{}' by manager with username '{}'", request.getStatusName(), transactionId, username);
+    public List<TransactionStatus> rejectTransaction(String username, int transactionId) {
+        LOGGER.debug("TransactionService: reject transaction with id '{}' by manager with username '{}'", transactionId, username);
 
         findUserByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
-
-        TransactionStatus status = new TransactionStatus(request.getStatusName(), transaction);
+        TransactionStatus status = new TransactionStatus(StatusName.REJECTED, transaction);
         transactionStatusRepository.save(status);
 
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
+
+    public List<TransactionStatus> addNextTransactionStatus(String username, int transactionId) {
+        LOGGER.debug("TransactionService  add new status to transaction with id '{}' by manager with username '{}'", transactionId, username);
+
+        findUserByUsername(username);
+        Transaction transaction = findTransactionById(transactionId);
+        List<TransactionStatus> statuses = transactionStatusRepository.findAllByTransactionId(transaction.getId(), Sort.by("date"));
+        StatusName nextStatus = StatusName.values()[statuses.size()];
+
+        if (nextStatus.equals(StatusName.CONTRACT_PREPARATION)) {
+            transaction.getCar().setAvailable(false);
+            carRepository.save(transaction.getCar());
+        }
+
+        TransactionStatus status = new TransactionStatus(nextStatus, transaction);
+        transactionStatusRepository.save(status);
+
+        return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
+    }
+
 
     public Transaction getTransactionById(String username, int transactionId) {
         Transaction transaction = findTransactionById(transactionId);

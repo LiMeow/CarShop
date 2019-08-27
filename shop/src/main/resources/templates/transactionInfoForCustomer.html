@@ -52,7 +52,7 @@
             <div class="btn-group btn-block justify-content-center">
 
                 <div th:if="${statuses[statuses.size()-1].status.name() == 'PAYMENT_EXPECTED'}">
-                    <a th:href="@{'{transactionId}/pay' (transactionId=${transaction.id})}"
+                    <a th:href="@{'/transactions/{transactionId}/pay' (transactionId=${transaction.id})}"
                        class="btn btn-lg sign-btn mt-4" href="#">To pay</a>
                 </div>
             </div>
