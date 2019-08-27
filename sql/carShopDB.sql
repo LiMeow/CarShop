@@ -8,12 +8,6 @@ CREATE TABLE shop_user(
 	user_role text not null
 );
 
-/*CREATE TABLE manager ( 	
-	id serial primary key,
-	username text unique not null,
-	password text not null
-);*/
-
  CREATE table car (
  id serial primary key,
  picture text not null,

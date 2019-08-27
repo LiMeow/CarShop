@@ -5,6 +5,7 @@ import net.thumbtack.bank.exceptions.ErrorCode;
 import net.thumbtack.bank.models.Card;
 import net.thumbtack.bank.models.CardOperation;
 import net.thumbtack.bank.models.Operation;
+import net.thumbtack.bank.repositories.AdminRepository;
 import net.thumbtack.bank.repositories.CardOperationRepository;
 import net.thumbtack.bank.repositories.CardRepository;
 import net.thumbtack.bank.requests.CreateCardRequest;
@@ -17,14 +18,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CardService {
+    private final AdminRepository adminRepository;
     private final CardRepository cardRepository;
     private final CardOperationRepository cardOperationRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(CardService.class);
 
     @Autowired
-    public CardService(CardRepository cardRepository, CardOperationRepository cardOperationRepository) {
+    public CardService(AdminRepository adminRepository, CardRepository cardRepository, CardOperationRepository cardOperationRepository) {
+        this.adminRepository = adminRepository;
         this.cardRepository = cardRepository;
         this.cardOperationRepository = cardOperationRepository;
     }
@@ -77,6 +82,25 @@ public class CardService {
         logOperation(card, CardOperation.CARD_DELETED, card.getCardNumber());
     }
 
+    public Card getCard(int cardId) {
+        return findCardById(cardId);
+    }
+
+    public List<Card> getAllCards() {
+        return (List<Card>) cardRepository.findAll();
+    }
+
+
+    private Card findCardById(int cardId) {
+        Card card = cardRepository.findById(cardId).orElse(null);
+
+        if (card == null) {
+            LOGGER.error("Unable to find card with id '{}'", card);
+            throw new BankException(ErrorCode.CARD_NOT_EXISTS, String.valueOf(cardId));
+        }
+
+        return card;
+    }
 
     private Card findCardByNumber(String cardNumber) {
         Card card = cardRepository.findByCardNumber(cardNumber);

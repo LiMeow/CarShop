@@ -17,6 +17,11 @@ CREATE TABLE operation(
 	date timestamptz not null default now()
 );
 
+CREATE TABLE bank_admin( 	
+	id serial primary key,
+	username text unique not null,
+	password text not null
+);
 
 
 
