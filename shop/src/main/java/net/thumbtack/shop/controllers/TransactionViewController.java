@@ -72,6 +72,7 @@ public class TransactionViewController {
         List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
         List<TransactionInfo> statuses = transactionService.getTransactionInfoList(transactionStatuses);
 
+        model.addAttribute("transactionId", transactionId);
         model.addAttribute("statuses", statuses);
         return "transactionInfoForManager";
     }

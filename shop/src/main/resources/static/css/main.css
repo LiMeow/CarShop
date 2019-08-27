@@ -2,7 +2,7 @@
     width: 50px;
  }
 
- .navbar{
+.navbar{
     background-color:#FF8C00;
  }
 
@@ -124,4 +124,25 @@ td a {
   -ms-transition: height  0.001s;
   -o-transition: height  0.001s;
   transition: height  0.001s;
+}
+
+.edit-btn:hover,
+.edit-btn:active{
+    outline: 0;
+    outline-color: transparent;
+    outline-width: 0;
+    outline-style: none;
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+    background-color: #F0FFF0;
+    border-color: #008B8B;
+}
+
+.edit-btn:focus{
+    outline: 0;
+    outline-color: transparent;
+    outline-width: 0;
+    outline-style: none;
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+    background-color: #FFFFFF;
+    border-color: #008B8B;
 }
