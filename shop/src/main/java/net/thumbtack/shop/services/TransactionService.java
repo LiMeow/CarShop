@@ -11,6 +11,7 @@ import net.thumbtack.shop.repositories.TransactionRepository;
 import net.thumbtack.shop.repositories.TransactionStatusRepository;
 import net.thumbtack.shop.repositories.UserRepository;
 import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
 import net.thumbtack.shop.responses.TransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,6 +93,23 @@ public class TransactionService {
         return transactionStatusRepository.findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
+    public TransactionStatus editTransactionStatusDescription(String username, int transactionId, int statusId, EditTransactionStatusDescriptionRequest request) {
+        LOGGER.debug("TransactionService edit description to status '{}'", statusId);
+
+        findManagerByUsername(username);
+        findTransactionById(transactionId);
+
+        TransactionStatus status = transactionStatusRepository.findById(statusId).orElse(null);
+
+        if (status == null)
+            throw new CarShopException(ErrorCode.TRANSACTION_STATUS_NOT_EXISTS, String.valueOf(statusId));
+
+        status.setDescription(request.getDescription());
+        transactionStatusRepository.save(status);
+
+        return status;
+    }
+
     public List<TransactionStatus> getTransactionStatuses(String username, int transactionId) {
         LOGGER.debug("TransactionService get statuses of transaction with id '{}' by manager with username '{}'", transactionId, username);
         findManagerByUsername(username);
@@ -120,7 +138,9 @@ public class TransactionService {
                     transactionStatus.getTransaction().getCar().getModel(),
                     transactionStatus.getTransaction().getCar().getPrice(),
                     transactionStatus.getTransaction().getCustomer().getName(),
-                    transactionStatus.getStatusName()));
+                    transactionStatus.getId(),
+                    transactionStatus.getStatusName(),
+                    transactionStatus.getDescription()));
         }
         return transactionInfoList;
     }
