@@ -1,7 +1,6 @@
 package net.thumbtack.shop.repositories;
 
 import net.thumbtack.shop.models.TransactionStatus;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,7 +12,7 @@ import java.util.List;
 @Repository
 public interface TransactionStatusRepository extends CrudRepository<TransactionStatus, Integer> {
     @Query("SELECT t FROM TransactionStatus t WHERE t.transaction.manager=null")
-    List<TransactionStatus> findAllFree(Pageable pageable);
+    List<TransactionStatus> findAllFree(Sort pageable);
 
     @Query(value = "SELECT t1.* FROM transaction_status t1 " +
             "JOIN (SELECT transaction_id, max(date) " +

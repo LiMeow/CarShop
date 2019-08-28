@@ -38,26 +38,20 @@ public class CarController {
         return ResponseEntity.ok().body(carService.updateCar(request, carId));
     }
 
-    @GetMapping(value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<?> getCar(@PathVariable("id") int carId) {
 
         return ResponseEntity.ok().body(carService.getCar(carId));
     }
 
 
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<?> getAllCars() {
 
         return ResponseEntity.ok().body(carService.getAvailableCars());
     }
 
-    @DeleteMapping(value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteCar(@PathVariable("id") int carId) {
         carService.deleteCar(carId);
         return ResponseEntity.noContent().build();

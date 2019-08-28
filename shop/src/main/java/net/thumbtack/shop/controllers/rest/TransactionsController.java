@@ -1,6 +1,7 @@
 package net.thumbtack.shop.controllers.rest;
 
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
+import net.thumbtack.shop.requests.PickUpTransactionRequest;
 import net.thumbtack.shop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/transactions")
 public class TransactionsController {
     private final TransactionService transactionService;
 
@@ -18,66 +20,48 @@ public class TransactionsController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping(path = "/{username}/transactions/free",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllFreeTransactions(@PathVariable("username") String username,
-                                                    @RequestParam(required = false, defaultValue = "0") int page,
-                                                    @RequestParam(required = false, defaultValue = "8") int size) {
-        return ResponseEntity.ok().body(transactionService.getAllFreeTransactions(username, page, size));
+    @GetMapping(path = "/free")
+    public ResponseEntity<?> getAllFreeTransactions() {
+        return ResponseEntity.ok().body(transactionService.getAllFreeTransactions());
     }
 
-    @PutMapping(value = "/{username}/transactions/free/{id}",
+    @PutMapping(value = "/free",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> pickUpTransaction(@PathVariable("username") String username,
-                                               @PathVariable("id") int transactionId) {
-        return ResponseEntity.ok().body(transactionService.pickUpTransaction(username, transactionId));
+    public ResponseEntity<?> pickUpTransaction(@Valid @RequestBody PickUpTransactionRequest request) {
+        return ResponseEntity.ok().body(transactionService.pickUpTransaction(request));
     }
 
-    @GetMapping(value = "/{username}/transactions",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllTransactionByManager(@PathVariable("username") String username) {
-
+    @GetMapping
+    public ResponseEntity<?> getAllTransactionByManager(@RequestParam String username) {
+        System.out.println(username);
         return ResponseEntity.ok().body(transactionService.getAllTransactionByManager(username));
     }
 
-    @PostMapping(value = "/{username}/transactions/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addNextTransactionStatus(@PathVariable("username") String username,
-                                                      @PathVariable("id") int transactionId) {
-        return ResponseEntity.ok().body(transactionService.addNextTransactionStatus(username, transactionId));
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<?> addNextTransactionStatus(@PathVariable("id") int transactionId) {
+        return ResponseEntity.ok().body(transactionService.addNextTransactionStatus(transactionId));
     }
 
-    @DeleteMapping(value = "/{username}/transactions/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> rejectTransaction(@PathVariable("username") String username,
-                                               @PathVariable("id") int transactionId) {
-
-        transactionService.rejectTransaction(username, transactionId);
-        return ResponseEntity.ok().body(transactionService.rejectTransaction(username, transactionId));
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> rejectTransaction(@PathVariable("id") int transactionId) {
+        return ResponseEntity.ok().body(transactionService.rejectTransaction(transactionId));
     }
 
-    @PutMapping(value = "/{username}/transactions/{transactionId}/statuses/{statusId}",
+    @PutMapping(value = "/{transactionId}/statuses/{statusId}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editTransactionStatusDescription(@Valid @RequestBody EditTransactionStatusDescriptionRequest request,
-                                                              @PathVariable("username") String username,
                                                               @PathVariable("transactionId") int transactionId,
                                                               @PathVariable("statusId") int statusId) {
 
-        return ResponseEntity.ok().body(transactionService.editTransactionStatusDescription(username, transactionId, statusId, request));
+        return ResponseEntity.ok().body(transactionService.editTransactionStatusDescription(transactionId, statusId, request));
     }
 
-    @GetMapping(value = "/{username}/transactions/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTransactionStatuses(@PathVariable("username") String username,
-                                                    @PathVariable("id") int transactionId) {
-        return ResponseEntity.ok().body(transactionService.getTransactionStatuses(username, transactionId));
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getTransactionStatuses(@PathVariable("id") int transactionId) {
+
+        return ResponseEntity.ok().body(transactionService.getTransactionStatuses(transactionId));
     }
 
 }
