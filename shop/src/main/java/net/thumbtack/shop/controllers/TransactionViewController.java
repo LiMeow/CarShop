@@ -96,9 +96,15 @@ public class TransactionViewController {
 
         List<ChartItem> applicationConfirmationData = chartService.getChartData(username, StatusName.APPLICATION_CONFIRMATION);
         List<ChartItem> confirmedData = chartService.getChartData(username, StatusName.CONFIRMED);
+        List<ChartItem> rejectedData = chartService.getChartData(username, StatusName.REJECTED);
+        List<ChartItem> testDriveData = chartService.getChartData(username, StatusName.TEST_DRIVE);
+        List<ChartItem> completedData = chartService.getChartData(username, StatusName.COMPLETED);
 
         modelMap.addAttribute("chartItems1", applicationConfirmationData);
         modelMap.addAttribute("chartItems2", confirmedData);
+        modelMap.addAttribute("chartItems3", rejectedData);
+        modelMap.addAttribute("chartItems4", testDriveData);
+        modelMap.addAttribute("chartItems5", completedData);
         return "transactionsStatistics";
     }
 

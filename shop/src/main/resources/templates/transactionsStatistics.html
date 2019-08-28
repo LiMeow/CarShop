@@ -13,12 +13,13 @@
     <div th:insert="~{header :: header}"></div>
 </header>
 
-<div class="container my-5" sec:authorize="isAuthenticated()">
-
-    <div class="btn-group btn-block">
-        <a th:href="@{/free-transactions}" class="btn sign-btn" href="#">Free Transactions</a>
-        <a th:href="@{/transactions-in-progress}" class="btn sign-btn" href="#">In Progress</a>
-        <a th:href="@{/transaction-statistics}" class="btn sign-btn active" href="#">Statistics</a>
+<div class="my-5" sec:authorize="isAuthenticated()">
+    <div class="container">
+        <div class="btn-group btn-block">
+            <a th:href="@{/free-transactions}" class="btn sign-btn" href="#">Free Transactions</a>
+            <a th:href="@{/transactions-in-progress}" class="btn sign-btn" href="#">In Progress</a>
+            <a th:href="@{/transaction-statistics}" class="btn sign-btn active" href="#">Statistics</a>
+        </div>
     </div>
     <div class="justify-content-center my-5" id="chartContainer"></div>
 </div>
@@ -29,6 +30,8 @@ window.onload = function() {
     var chartItems1 = /*[[${chartItems1}]]*/ 'default';
     var chartItems2 = /*[[${chartItems2}]]*/ 'default';
     var chartItems3 = /*[[${chartItems3}]]*/ 'default';
+    var chartItems4 = /*[[${chartItems4}]]*/ 'default';
+    var chartItems5 = /*[[${chartItems5}]]*/ 'default';
 
     //  Only a test
     chartItems2.forEach(myFunction);
@@ -71,13 +74,25 @@ window.onload = function() {
     		dataPoints: []
     	},
     	{
-    	    name: "Number of completed transactions",
+    	    name: "Number of confirmed applications",
     		type: "spline",
     		showInLegend: true,
     		dataPoints: []
     	},
     	{
-    	    name: "Number of rejected transactions",
+    	    name: "Number of rejected applications",
+    		type: "spline",
+    		showInLegend: true,
+    		dataPoints: []
+    	},
+    	{
+    	    name: "Number of test drive",
+    		type: "spline",
+    		showInLegend: true,
+    		dataPoints: []
+    	},
+    	{
+    	    name: "Number of completed transactions",
     		type: "spline",
     		showInLegend: true,
     		dataPoints: []
@@ -88,10 +103,13 @@ window.onload = function() {
     chart.options.data[0].dataPoints = chartItems1;
     chart.options.data[1].dataPoints = chartItems2;
     chart.options.data[2].dataPoints = chartItems3;
+    chart.options.data[3].dataPoints = chartItems4;
+    chart.options.data[4].dataPoints = chartItems5;
     chart.render();
 
 }
 /*]]>*/
+
 
 
 </script>

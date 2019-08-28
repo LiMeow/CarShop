@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +35,7 @@ public class ChartService {
         LOGGER.debug("ChartService get transaction data with status '{}' by manager with username '{}'", statusName, username);
 
         User manager = findManagerByUsername(username);
-        return chartRepository.findChartItems(manager.getId(), statusName);
+        return updateChartData(chartRepository.findChartItems(manager.getId(), statusName));
     }
 
     private User findManagerByUsername(String username) {
@@ -45,6 +47,29 @@ public class ChartService {
         }
 
         return manager;
+    }
+
+    private List<ChartItem> updateChartData(List<ChartItem> chartItems) {
+        List<ChartItem> chartItemList = new ArrayList<>();
+        int start = 1, end = 1;
+        if (!chartItems.isEmpty()) {
+            start = Month.valueOf(chartItems.get(0).getLabel().toUpperCase()).getValue();
+            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue();
+        }
+
+        for (int i = 1; i < start; i++) {
+            chartItemList.add(new ChartItem(i, 0));
+        }
+
+        for (int i = 0; i < chartItems.size(); i++) {
+            chartItemList.add(chartItems.get(i));
+        }
+
+        for (int i = end; i < 13; i++) {
+            chartItemList.add(new ChartItem(i, 0));
+        }
+
+        return chartItemList;
     }
 
 }
