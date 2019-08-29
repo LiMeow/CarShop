@@ -37,28 +37,28 @@ public class ChartServiceTests {
     public void testGetChartData() {
         User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
 
-        ChartItem chartItem1 = new ChartItem(1, 1);
-        ChartItem chartItem2 = new ChartItem(2, 2);
-        ChartItem chartItem3 = new ChartItem(3, 3);
-        ChartItem chartItem4 = new ChartItem(4, 0);
-        ChartItem chartItem5 = new ChartItem(5, 0);
-        ChartItem chartItem6 = new ChartItem(6, 0);
-        ChartItem chartItem7 = new ChartItem(7, 0);
-        ChartItem chartItem8 = new ChartItem(8, 0);
-        ChartItem chartItem9 = new ChartItem(9, 0);
-        ChartItem chartItem10 = new ChartItem(10, 0);
-        ChartItem chartItem11 = new ChartItem(11, 0);
-        ChartItem chartItem12 = new ChartItem(12, 0);
+        ChartItem chartItem1 = new ChartItem("January", 1);
+        ChartItem chartItem2 = new ChartItem("February", 2);
+        ChartItem chartItem3 = new ChartItem("March", 3);
+        ChartItem chartItem4 = new ChartItem("April", 0);
+        ChartItem chartItem5 = new ChartItem("May", 0);
+        ChartItem chartItem6 = new ChartItem("June", 0);
+        ChartItem chartItem7 = new ChartItem("July", 0);
+        ChartItem chartItem8 = new ChartItem("August", 0);
+        ChartItem chartItem9 = new ChartItem("September", 0);
+        ChartItem chartItem10 = new ChartItem("October", 0);
+        ChartItem chartItem11 = new ChartItem("November", 0);
+        ChartItem chartItem12 = new ChartItem("December", 0);
         List<ChartItem> chartItems = Arrays.asList(chartItem1, chartItem2, chartItem3);
         List<ChartItem> updatedChartItems = Arrays.asList(chartItem1, chartItem2, chartItem3, chartItem4, chartItem5, chartItem6, chartItem7, chartItem8, chartItem9, chartItem10, chartItem11, chartItem12);
 
         when(userRepository.findManagerByUsername(manager.getUsername())).thenReturn(manager);
-        when(chartRepository.findChartItems(manager.getId(), StatusName.CONFIRMED)).thenReturn(chartItems);
+        when(chartRepository.findChartItems(manager.getId(), StatusName.APPLICATION_CONFIRMATION)).thenReturn(chartItems);
 
-        assertEquals(updatedChartItems, chartService.getChartData(manager.getUsername(), StatusName.CONFIRMED));
+        assertEquals(updatedChartItems, chartService.getChartData(manager.getUsername(), StatusName.APPLICATION_CONFIRMATION));
 
         verify(userRepository).findManagerByUsername(manager.getUsername());
-        verify(chartRepository).findChartItems(manager.getId(), StatusName.CONFIRMED);
+        verify(chartRepository).findChartItems(manager.getId(), StatusName.APPLICATION_CONFIRMATION);
     }
 
     @Test
