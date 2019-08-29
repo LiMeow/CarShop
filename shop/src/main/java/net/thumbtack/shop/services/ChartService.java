@@ -62,14 +62,12 @@ public class ChartService {
             chartItemList.add(new ChartItem(i, 0));
         }
 
-        for (int i = 0; i < chartItems.size(); i++) {
-            chartItemList.add(chartItems.get(i));
-        }
+        chartItemList.addAll(chartItems);
 
         for (int i = end + 1; i < 13; i++) {
             chartItemList.add(new ChartItem(i, 0));
         }
-        
+
         return chartItemList;
     }
 

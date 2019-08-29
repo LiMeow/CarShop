@@ -21,13 +21,7 @@ public class ChartItem {
     }
 
     public ChartItem(Integer label, int y) {
-        this.label = Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-        Y = y;
-    }
-
-    public ChartItem(int label, int y) {
-        this.label = Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-        Y = y;
+        this(Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH), y);
     }
 
     public String getLabel() {
