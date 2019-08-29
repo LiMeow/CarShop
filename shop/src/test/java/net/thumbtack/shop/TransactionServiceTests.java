@@ -76,6 +76,40 @@ public class TransactionServiceTests {
     }
 
     @Test
+    public void testRejectTransaction() {
+        Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
+        Customer customer = new Customer(1, "Name", "+12345678912");
+        User manager = new User(1, "manager", "password", UserRole.ROLE_MANAGER);
+        Transaction transaction = new Transaction(1, car, customer, manager);
+        TransactionStatus transactionStatus = new TransactionStatus(0, StatusName.REJECTED, transaction);
+        List<TransactionStatus> statuses = Collections.singletonList(transactionStatus);
+
+        when(transactionRepository.findById(transaction.getId())).thenReturn(Optional.of(transaction));
+        when(statusRepository.save(transactionStatus)).thenReturn(transactionStatus);
+        when(statusRepository.findAllByTransactionId(transaction.getId(), Sort.by("date"))).thenReturn(statuses);
+
+        assertEquals(statuses, transactionService.rejectTransaction(transaction.getId()));
+
+        verify(transactionRepository).findById(transaction.getId());
+        verify(statusRepository).save(transactionStatus);
+        verify(statusRepository).findAllByTransactionId(transaction.getId(), Sort.by("date"));
+    }
+
+    @Test
+    public void testRejectNotExistingTransaction() {
+        when(transactionRepository.findById(1)).thenReturn(Optional.empty());
+
+        try {
+            transactionService.rejectTransaction(1);
+        } catch (CarShopException ex) {
+            assertEquals(ErrorCode.TRANSACTION_NOT_EXISTS, ex.getErrorCode());
+        }
+
+        verify(transactionRepository).findById(1);
+    }
+
+
+    @Test
     public void testAddNextTransactionStatus() {
         Car car = new Car(1, "picture.jpg", "Audi A8", 2700000, 2017, true);
         Customer customer = new Customer(1, "Name", "+12345678912");
