@@ -52,9 +52,10 @@ public class ChartService {
     private List<ChartItem> updateChartData(List<ChartItem> chartItems) {
         List<ChartItem> chartItemList = new ArrayList<>();
         int start = 1, end = 1;
+
         if (!chartItems.isEmpty()) {
             start = Month.valueOf(chartItems.get(0).getLabel().toUpperCase()).getValue();
-            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue() + 1;
+            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue();
         }
 
         for (int i = 1; i < start; i++) {
@@ -65,7 +66,7 @@ public class ChartService {
             chartItemList.add(chartItems.get(i));
         }
 
-        for (int i = end; i < 13; i++) {
+        for (int i = end + 1; i < 13; i++) {
             chartItemList.add(new ChartItem(i, 0));
         }
 
