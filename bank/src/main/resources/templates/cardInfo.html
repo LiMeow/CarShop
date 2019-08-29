@@ -8,42 +8,39 @@
 </head>
 
 <body>
-<div class="container text-center">
+<div class="container ">
     <div class="form-auth col-sm-6 col-md-6 col-lg-3">
-        <div class="my-3">
+
+        <div class="my-3 text-center">
             <img th:src="@{/img/logo.png}" width="120">
             <h2>Bank</h2>
             <h5>Your card has been created successfully.</h5>
         </div>
+
         <div class="card py-3 px-3">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="cardNumber">Card Number</label>
-                    <input type="text" name="cardNumber" id="cardNumber" class="form-control"
-                           th:placeholder="${card.cardNumber}" disabled>
+                    <div id="cardNumber" class="form-control" th:text="${card.cardNumber}"></div>
                 </div>
                 <div class="form-group col-sm-4 col-md-3 col-lg-4">
                     <label for="expiryDate">Expired date</label>
-                    <input type="text" name="expiryDate" id="expiryDate" class="form-control"
-                           th:placeholder="${card.expiryDate}"
-                           disabled>
+                    <div id="expiryDate" class="form-control" th:text="${card.expiryDate}"></div>
                 </div>
                 <div class="form-group col-sm-4 col-md-3 col-lg-4 mr-3">
                     <label for="cvv">CVC/CVV</label>
-                    <input type="text" name="cvv" id="cvv" class="form-control" th:placeholder="${card.cvv}"
-                           disabled>
+                    <div id="cvv" class="form-control" th:text="${card.cvv}"></div>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-3">
                     <img th:src="@{/img/masterCard.png}" class="img-rounded">
                 </div>
                 <div class="form-group col-md-12">
                     <label for="cardHolderName">Card Holder Name</label>
-                    <input type="text" name="cardHolderName" id="cardHolderName" class="form-control"
-                           th:placeholder="${card.cardHolderName}" disabled>
+                    <div id="cardHolderName" class="form-control" th:text="${card.cardHolderName}"></div>
                 </div>
             </div>
         </div>
-        <div class="justify-content-center">
+        <div class="text-center">
             <div class="mt-4">
                 <a th:href="@{/}" class="btn btn-lg bank-btn" href="#">OK</a>
             </div>
