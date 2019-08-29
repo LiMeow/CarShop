@@ -15,10 +15,10 @@ public class ChartItem {
     public ChartItem() {
     }
 
-   /* public ChartItem(String label, int y) {
+    public ChartItem(String label, int y) {
         this.label = label;
         Y = y;
-    }*/
+    }
 
     public ChartItem(Integer label, int y) {
         this.label = Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
