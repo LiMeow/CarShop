@@ -34,11 +34,7 @@ public class ChartService {
     public List<ChartItem> getChartData(String username, StatusName statusName) {
         LOGGER.debug("ChartService get transaction data with status '{}' by manager with username '{}'", statusName, username);
         User manager = findManagerByUsername(username);
-        List<ChartItem> chartItemList = chartRepository.findChartItems(manager.getId(), statusName);
-        LOGGER.debug("ChartService: founded chartItems '{}'", chartItemList.toString());
-        List<ChartItem> chartItems = updateChartData(chartItemList);
-        LOGGER.debug("ChartService return chartItems '{}'", chartItems.toString());
-        return chartItems;
+        return updateChartData(chartRepository.findChartItems(manager.getId(), statusName));
     }
 
     private User findManagerByUsername(String username) {
@@ -53,13 +49,13 @@ public class ChartService {
     }
 
     private List<ChartItem> updateChartData(List<ChartItem> chartItems) {
-        LOGGER.debug("ChartService: update chartItems '{}'", chartItems.toString());
+        LOGGER.debug("ChartService update chart data '{}'", chartItems);
         List<ChartItem> chartItemList = new ArrayList<>();
-        int start = 1, end = 1;
+        int start = 1, end = 0;
 
         if (!chartItems.isEmpty()) {
-            start = Month.valueOf(chartItems.get(0).getLabel().toUpperCase()).getValue();
-            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue();
+            start = Month.valueOf(chartItems.get(0).getLabel()).getValue();
+            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel()).getValue();
         }
 
         for (Integer i = 1; i < start; i++) {
