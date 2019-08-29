@@ -54,7 +54,7 @@ public class ChartService {
         int start = 1, end = 1;
         if (!chartItems.isEmpty()) {
             start = Month.valueOf(chartItems.get(0).getLabel().toUpperCase()).getValue();
-            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue();
+            end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue() + 1;
         }
 
         for (int i = 1; i < start; i++) {
