@@ -58,13 +58,13 @@ public class ChartService {
             end = Month.valueOf(chartItems.get(chartItems.size() - 1).getLabel().toUpperCase()).getValue();
         }
 
-        for (int i = 1; i < start; i++) {
+        for (Integer i = 1; i < start; i++) {
             chartItemList.add(new ChartItem(i, 0));
         }
 
         chartItemList.addAll(chartItems);
 
-        for (int i = end + 1; i < 13; i++) {
+        for (Integer i = end + 1; i < 13; i++) {
             chartItemList.add(new ChartItem(i, 0));
         }
 
