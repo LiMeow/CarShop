@@ -51,7 +51,7 @@ public class CustomerViewController {
     public String transactionStoryPage(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username);
+        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatusesByCustomer(username);
         List<TransactionInfo> statuses = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("transaction", transactionStatuses.get(0).getTransaction());
@@ -62,10 +62,8 @@ public class CustomerViewController {
 
     @GetMapping("/transactions/{transactionId}/pay")
     public String payPage(@PathVariable("transactionId") int transactionId, Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
         model.addAttribute("transactionId", transactionId);
-        model.addAttribute("price", transactionService.getTransactionById(username, transactionId).getCar().getPrice());
+        model.addAttribute("price", transactionService.getTransactionById(transactionId).getCar().getPrice());
 
         return "inputCardData";
     }
@@ -77,8 +75,7 @@ public class CustomerViewController {
 
     @GetMapping("/transactions/{transactionId}/pay-success")
     public String onSuccessOperation(@PathVariable("transactionId") int transactionId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        transactionService.addNextTransactionStatus(username, transactionId);
+        transactionService.addNextTransactionStatus(transactionId);
         return "onSuccessOperation";
     }
 

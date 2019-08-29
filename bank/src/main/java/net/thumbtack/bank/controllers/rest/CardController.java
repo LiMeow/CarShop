@@ -30,17 +30,13 @@ public class CardController {
         return ResponseEntity.ok().body(cardService.createCard(request));
     }
 
-    @GetMapping(value = "/{id}/info",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/info")
     public ResponseEntity<?> getCard(@PathVariable("id") int cardId) {
 
         return ResponseEntity.ok().body(cardService.getCard(cardId));
     }
 
-    @GetMapping(value = "/info",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/info")
     public ResponseEntity<?> getAllCard() {
 
         return ResponseEntity.ok().body(cardService.getAllCards());

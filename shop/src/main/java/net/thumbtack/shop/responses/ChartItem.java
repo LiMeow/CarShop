@@ -3,8 +3,6 @@ package net.thumbtack.shop.responses;
 import javax.persistence.Embeddable;
 import java.math.BigInteger;
 import java.time.Month;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.Objects;
 
 @Embeddable
@@ -21,7 +19,7 @@ public class ChartItem {
     }
 
     public ChartItem(Integer label, int y) {
-        this.label = Month.of(label).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+        this.label = String.valueOf(Month.of(label));
         Y = y;
     }
 
@@ -30,7 +28,7 @@ public class ChartItem {
     }
 
     public void setLabel(Double label) {
-        this.label = Month.of(label.intValue()).getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+        this.label = String.valueOf(Month.of(label.intValue()));
     }
 
     public int getY() {

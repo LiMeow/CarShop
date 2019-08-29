@@ -1,4 +1,4 @@
- import * as urls from '/js/urls.js';
+ import * as urls from '/carshop/js/urls.js';
 
  var formEl = document.getElementById('form');
 

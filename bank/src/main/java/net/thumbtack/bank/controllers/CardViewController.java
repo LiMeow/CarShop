@@ -25,7 +25,7 @@ public class CardViewController {
         return "createCard";
     }
 
-    @PostMapping("/cards/create")
+    @PostMapping("/cards/create-card")
     public String createCard(@ModelAttribute("request") CreateCardRequest request, Model model) {
         model.addAttribute("card", cardService.createCard(request));
         return "cardInfo";

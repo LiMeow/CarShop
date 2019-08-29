@@ -3,9 +3,9 @@ package net.thumbtack.shop.controllers;
 import net.thumbtack.shop.models.StatusName;
 import net.thumbtack.shop.models.TransactionStatus;
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
+import net.thumbtack.shop.requests.PickUpTransactionRequest;
 import net.thumbtack.shop.responses.ChartItem;
 import net.thumbtack.shop.responses.TransactionInfo;
-import net.thumbtack.shop.services.CarService;
 import net.thumbtack.shop.services.ChartService;
 import net.thumbtack.shop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +22,18 @@ import java.util.List;
 
 @Controller
 public class TransactionViewController {
-    private final CarService carService;
     private final TransactionService transactionService;
     private final ChartService chartService;
 
     @Autowired
-    public TransactionViewController(CarService carService, TransactionService transactionService, ChartService chartService) {
-        this.carService = carService;
+    public TransactionViewController(TransactionService transactionService, ChartService chartService) {
         this.transactionService = transactionService;
         this.chartService = chartService;
     }
 
     @GetMapping("/free-transactions")
     public String freeTransactionsPage(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions(username, 0, 15);
+        List<TransactionStatus> transactionStatuses = transactionService.getAllFreeTransactions();
         List<TransactionInfo> transactions = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("freeTransactions", transactions);
@@ -47,8 +43,7 @@ public class TransactionViewController {
     @PostMapping("/pick-up/{id}")
     public String pickUpTransaction(@PathVariable("id") int transactionId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        transactionService.pickUpTransaction(username, transactionId);
+        transactionService.pickUpTransaction(new PickUpTransactionRequest(username, transactionId));
         return "redirect:/transactions-in-progress";
     }
 
@@ -65,9 +60,7 @@ public class TransactionViewController {
 
     @GetMapping("/transaction-story/{id}")
     public String transactionStoryPage(@PathVariable("id") int transactionId, Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(username, transactionId);
+        List<TransactionStatus> transactionStatuses = transactionService.getTransactionStatuses(transactionId);
         List<TransactionInfo> statuses = transactionService.getTransactionInfoList(transactionStatuses);
 
         model.addAttribute("transactionId", transactionId);
@@ -77,8 +70,7 @@ public class TransactionViewController {
 
     @GetMapping("/transaction-story/{id}/add-status")
     public String addNextTransactionStatus(@PathVariable("id") int transactionId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        transactionService.addNextTransactionStatus(username, transactionId);
+        transactionService.addNextTransactionStatus(transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
 
@@ -87,16 +79,14 @@ public class TransactionViewController {
                                                    @PathVariable("statusId") int statusId,
                                                    @ModelAttribute("request") EditTransactionStatusDescriptionRequest request) {
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        transactionService.editTransactionStatusDescription(username, transactionId, statusId, request);
+        transactionService.editTransactionStatusDescription(transactionId, statusId, request);
 
         return "redirect:/transaction-story/" + transactionId;
     }
 
     @GetMapping("/transaction-story/{id}/reject")
     public String rejectTransaction(@PathVariable("id") int transactionId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        transactionService.rejectTransaction(username, transactionId);
+        transactionService.rejectTransaction(transactionId);
         return "redirect:/transaction-story/" + transactionId;
     }
 
@@ -106,9 +96,15 @@ public class TransactionViewController {
 
         List<ChartItem> applicationConfirmationData = chartService.getChartData(username, StatusName.APPLICATION_CONFIRMATION);
         List<ChartItem> confirmedData = chartService.getChartData(username, StatusName.CONFIRMED);
+        List<ChartItem> rejectedData = chartService.getChartData(username, StatusName.REJECTED);
+        List<ChartItem> testDriveData = chartService.getChartData(username, StatusName.TEST_DRIVE);
+        List<ChartItem> completedData = chartService.getChartData(username, StatusName.COMPLETED);
 
         modelMap.addAttribute("chartItems1", applicationConfirmationData);
         modelMap.addAttribute("chartItems2", confirmedData);
+        modelMap.addAttribute("chartItems3", rejectedData);
+        modelMap.addAttribute("chartItems4", testDriveData);
+        modelMap.addAttribute("chartItems5", completedData);
         return "transactionsStatistics";
     }
 
