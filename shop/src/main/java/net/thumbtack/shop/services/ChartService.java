@@ -35,6 +35,8 @@ public class ChartService {
         LOGGER.debug("ChartService get transaction data with status '{}' by manager with username '{}'", statusName, username);
 
         User manager = findManagerByUsername(username);
+        List<ChartItem> chartItemList = updateChartData(chartRepository.findChartItems(manager.getId(), statusName));
+        LOGGER.debug("ChartService return chartItems '{}'", chartItemList.toString());
         return updateChartData(chartRepository.findChartItems(manager.getId(), statusName));
     }
 

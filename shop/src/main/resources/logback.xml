@@ -29,7 +29,7 @@
         </triggeringPolicy>
     </appender>
 
-    <root level="ERROR">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="carshoplog"/>
     </root>
