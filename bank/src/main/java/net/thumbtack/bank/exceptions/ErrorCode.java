@@ -9,7 +9,10 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR("'%s'"),
     NOT_ENOUGH_MONEY("Not enough money"),
     WRONG_OR_EMPTY_REQUEST("Wrong or empty request"),
-    WRONG_URL("Wrong URL");
+    WRONG_URL("Wrong URL"),
+    WRONG_PASSWORD("Wrong password."),
+    USER_ALREADY_EXISTS("User with username '%s' already exists."),
+    USER_NOT_EXISTS("User with username '%s' not exists.");
 
 
     private String message;

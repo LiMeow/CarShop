@@ -1,6 +1,5 @@
 package net.thumbtack.shop.controllers.rest;
 
-import net.thumbtack.shop.requests.AddTransactionStatusRequest;
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
 import net.thumbtack.shop.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +46,19 @@ public class TransactionsController {
     @PostMapping(value = "/{username}/transactions/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addTransactionStatus(AddTransactionStatusRequest request,
-                                                  @PathVariable("username") String username,
-                                                  @PathVariable("id") int transactionId) {
-        return ResponseEntity.ok().body(transactionService.addTransactionStatus(request, username, transactionId));
+    public ResponseEntity<?> addNextTransactionStatus(@PathVariable("username") String username,
+                                                      @PathVariable("id") int transactionId) {
+        return ResponseEntity.ok().body(transactionService.addNextTransactionStatus(username, transactionId));
+    }
+
+    @DeleteMapping(value = "/{username}/transactions/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> rejectTransaction(@PathVariable("username") String username,
+                                               @PathVariable("id") int transactionId) {
+
+        transactionService.rejectTransaction(username, transactionId);
+        return ResponseEntity.ok().body(transactionService.rejectTransaction(username, transactionId));
     }
 
     @PutMapping(value = "/{username}/transactions/{transactionId}/statuses/{statusId}",

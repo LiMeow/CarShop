@@ -1,0 +1,98 @@
+.navbar-brand img{
+    width: 50px;
+ }
+
+.navbar{
+    background-color:#0F78FF;
+ }
+
+.nav-link{
+    color:#AED1FF!important;
+}
+
+.nav-link:active,
+.nav-link:hover,
+.nav-link:focus{
+    color:#FFFFFF!important;
+}
+
+.bank-btn {
+    color:#FFFFFF;
+    background-color: #0F78FF;
+}
+
+.bank-btn.active,
+.bank-btn:hover,
+.bank-btn:focus{
+    outline: 0;
+    outline-color: transparent;
+    outline-width: 0;
+    outline-style: none;
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+    color:#FFFFFF;
+    background-color: #72b0ff;
+}
+
+.form-auth {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.view-btn:hover {
+    background-color: #E0EEFF;
+    border-color: #0F78FF;
+}
+
+.back-btn:hover {
+    background-color: #E0EEFF;
+    border-color: #0F78FF;
+}
+
+.dropdown-btn{
+     outline: 0!important;
+     outline-color: transparent!important;
+     outline-width: 0!important;
+     outline-style: none!important;
+     box-shadow: 0 0 0 0 rgba(0,123,255,0)!important;
+     background-color: #0f78ff;
+     color: #FFFFFF;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus{
+    color: #FFFFFF;
+}
+
+.dropdown-btn-item:hover,
+.dropdown-btn-item:focus{
+    color: #FFFFFF;
+    background-color: #0f78ff;
+}
+
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.card {
+    background-color: #f2f2f2;
+}
+
+.card img {
+    display: block;
+    height: 40;
+    width: 100%;
+}
+
+.table-hover tr:hover{
+    background-color: #E0EEFF!important;
+}

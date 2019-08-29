@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Bank</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<header>
+    <div class="navbar navbar-dark shadow-sm" th:fragment="header">
+        <div class="container d-flex justify-content-between">
+            <a th:href="@{/}" href="#" class="navbar-brand">
+                <img th:src="@{/img/logo.png}">
+                <strong>Bank</strong>
+            </a>
+
+            <div sec:authorize="isAuthenticated()">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle dropdown-btn"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img th:src="@{/img/userLogo.png}" width="35" height="35">
+                        <span sec:authentication="principal"/>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a th:href="@{/}" class="dropdown-item dropdown-btn-item" href="#">To admin page</a>
+                        <a class="dropdown-item dropdown-btn-item" th:href="@{/}" href="#" onclick='removeCookies()'>Sign
+                            Out</a>
+                    </div>
+                </div>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/signin}" class="btn btn-outline-light" href="#">Sign In</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script src="/js/script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</body>
+</html>
