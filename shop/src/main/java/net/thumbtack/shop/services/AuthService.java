@@ -61,12 +61,12 @@ public class AuthService {
         User user = userRepository.findByUsername(request.getUsername());
 
         if (user == null) {
-            LOGGER.error("Unable to signIn: User with username '{}' not exists.", user.getUsername());
+            LOGGER.error("Unable to signIn: User with username '{}' not exists.", request.getUsername());
             throw new CarShopException(ErrorCode.USER_NOT_EXISTS, request.getUsername());
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            LOGGER.error("Unable to signIn: User with username '{}' entered the wrong password ", user.getUsername());
+            LOGGER.error("Unable to signIn: User with username '{}' entered the wrong password ", request.getUsername());
             throw new CarShopException(ErrorCode.WRONG_PASSWORD);
         }
 

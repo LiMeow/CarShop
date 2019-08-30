@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>CarShop</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<header>
+    <div th:insert="~{navbar :: nav}"></div>
+</header>
+
+<div class="container my-5" sec:authorize="isAuthenticated()">
+    <table class="table table-hover text-center">
+        <tr>
+            <th>Number</th>
+            <th>Card</th>
+            <th></th>
+        </tr>
+        <tr th:each="card,iteration : ${cards}">
+            <td th:text="${iteration.count}"></td>
+            <td th:text="${card.cardNumber}"></td>
+            <td>
+                <form class="form" action="#" th:action="@{'/cards/{id}/information' (id=${card.id})}" method="GET">
+                    <button class="btn view-btn" type="submit">
+                        <img th:src="@{/img/view.svg}" width="20">
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script src="/bank/js/signOut.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+</body>
+</html>

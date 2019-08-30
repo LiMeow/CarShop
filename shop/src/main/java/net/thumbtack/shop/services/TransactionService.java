@@ -2,22 +2,14 @@ package net.thumbtack.shop.services;
 
 import net.thumbtack.shop.exceptions.CarShopException;
 import net.thumbtack.shop.exceptions.ErrorCode;
-import net.thumbtack.shop.models.Customer;
-import net.thumbtack.shop.models.Transaction;
-import net.thumbtack.shop.models.TransactionStatus;
-import net.thumbtack.shop.models.User;
-import net.thumbtack.shop.repositories.CustomerRepository;
-import net.thumbtack.shop.repositories.TransactionRepository;
-import net.thumbtack.shop.repositories.TransactionStatusRepository;
-import net.thumbtack.shop.repositories.UserRepository;
-import net.thumbtack.shop.requests.AddTransactionStatusRequest;
+import net.thumbtack.shop.models.*;
+import net.thumbtack.shop.repositories.*;
 import net.thumbtack.shop.requests.EditTransactionStatusDescriptionRequest;
+import net.thumbtack.shop.requests.PickUpTransactionRequest;
 import net.thumbtack.shop.responses.TransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +19,7 @@ import java.util.List;
 
 @Service
 public class TransactionService {
+    private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionStatusRepository transactionStatusRepository;
@@ -35,20 +28,21 @@ public class TransactionService {
 
     @Autowired
     public TransactionService(
-            CustomerRepository customerRepository, TransactionRepository transactionRepository,
+            CarRepository carRepository, CustomerRepository customerRepository, TransactionRepository transactionRepository,
             TransactionStatusRepository transactionStatusRepository,
             UserRepository userRepository) {
+        this.carRepository = carRepository;
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
         this.transactionStatusRepository = transactionStatusRepository;
         this.userRepository = userRepository;
     }
 
-    public Transaction pickUpTransaction(String username, int transactionId) {
-        LOGGER.debug("TransactionService pick up transaction with id '{}' by manager with username '{}'", transactionId, username);
+    public Transaction pickUpTransaction(PickUpTransactionRequest request) {
+        LOGGER.debug("TransactionService pick up transaction with id '{}' by manager with username '{}'", request.getTransactionId(), request.getUsername());
 
-        User manager = findManagerByUsername(username);
-        Transaction transaction = findTransactionById(transactionId);
+        User manager = findManagerByUsername(request.getUsername());
+        Transaction transaction = findTransactionById(request.getTransactionId());
 
         transaction.setManager(manager);
         transactionRepository.save(transaction);
@@ -56,34 +50,41 @@ public class TransactionService {
         return transaction;
     }
 
-    public List<TransactionStatus> addTransactionStatus(AddTransactionStatusRequest request, String username, int transactionId) {
-        LOGGER.debug("TransactionService  add status '{}' to transaction with id '{}' by manager with username '{}'", request.getStatusName(), transactionId, username);
+    public List<TransactionStatus> rejectTransaction(int transactionId) {
+        LOGGER.debug("TransactionService: reject transaction with id '{}'", transactionId);
 
-        findUserByUsername(username);
         Transaction transaction = findTransactionById(transactionId);
-
-        TransactionStatus status = new TransactionStatus(request.getStatusName(), transaction);
+        TransactionStatus status = new TransactionStatus(StatusName.REJECTED, transaction);
         transactionStatusRepository.save(status);
 
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public Transaction getTransactionById(String username, int transactionId) {
+    public List<TransactionStatus> addNextTransactionStatus(int transactionId) {
+        LOGGER.debug("TransactionService  add new status to transaction with id '{}'", transactionId);
+
         Transaction transaction = findTransactionById(transactionId);
+        List<TransactionStatus> statuses = transactionStatusRepository.findAllByTransactionId(transaction.getId(), Sort.by("date"));
+        StatusName nextStatus = StatusName.values()[statuses.size()];
 
-        if (!transaction.getManager().getUsername().equals(username) && (transaction.getCustomer().getUser() != null && !transaction.getCustomer().getUser().getUsername().equals(username)))
-            throw new CarShopException(ErrorCode.NOT_ENOUGH_AUTHORITY, username);
+        if (nextStatus.equals(StatusName.CONTRACT_PREPARATION)) {
+            transaction.getCar().setAvailable(false);
+            carRepository.save(transaction.getCar());
+        }
 
-        return transaction;
+        TransactionStatus status = new TransactionStatus(nextStatus, transaction);
+        transactionStatusRepository.save(status);
+
+        return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public List<TransactionStatus> getAllFreeTransactions(String username, int page, int size) {
-        LOGGER.debug("TransactionService get all free transactions by manager with username '{}'", username);
+    public Transaction getTransactionById(int transactionId) {
+        return findTransactionById(transactionId);
+    }
 
-        findManagerByUsername(username);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("date"));
-
-        return transactionStatusRepository.findAllFree(pageable);
+    public List<TransactionStatus> getAllFreeTransactions() {
+        LOGGER.debug("TransactionService get all free transactions");
+        return transactionStatusRepository.findAllFree(Sort.by("date"));
     }
 
     public List<TransactionStatus> getAllTransactionByManager(String username) {
@@ -93,12 +94,10 @@ public class TransactionService {
         return transactionStatusRepository.findAllLastTransactionsStatusesByManager(manager.getId());
     }
 
-    public TransactionStatus editTransactionStatusDescription(String username, int transactionId, int statusId, EditTransactionStatusDescriptionRequest request) {
+    public TransactionStatus editTransactionStatusDescription(int transactionId, int statusId, EditTransactionStatusDescriptionRequest request) {
         LOGGER.debug("TransactionService edit description to status '{}'", statusId);
 
-        findManagerByUsername(username);
         findTransactionById(transactionId);
-
         TransactionStatus status = transactionStatusRepository.findById(statusId).orElse(null);
 
         if (status == null)
@@ -110,15 +109,13 @@ public class TransactionService {
         return status;
     }
 
-    public List<TransactionStatus> getTransactionStatuses(String username, int transactionId) {
-        LOGGER.debug("TransactionService get statuses of transaction with id '{}' by manager with username '{}'", transactionId, username);
-        findManagerByUsername(username);
+    public List<TransactionStatus> getTransactionStatuses(int transactionId) {
+        LOGGER.debug("TransactionService get statuses of transaction with id '{}'", transactionId);
         findTransactionById(transactionId);
-
         return transactionStatusRepository.findAllByTransactionId(transactionId, Sort.by("date"));
     }
 
-    public List<TransactionStatus> getTransactionStatuses(String username) {
+    public List<TransactionStatus> getTransactionStatusesByCustomer(String username) {
         LOGGER.debug("TransactionService get statuses of transaction by customer with username '{}'", username);
 
         Customer customer = findCustomerByUsername(username);
@@ -145,16 +142,6 @@ public class TransactionService {
         return transactionInfoList;
     }
 
-
-    private User findUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            LOGGER.error("Unable to find user with username '{}'", username);
-            throw new CarShopException(ErrorCode.USER_NOT_EXISTS, username);
-        }
-
-        return user;
-    }
 
     private User findManagerByUsername(String username) {
         User manager = userRepository.findManagerByUsername(username);

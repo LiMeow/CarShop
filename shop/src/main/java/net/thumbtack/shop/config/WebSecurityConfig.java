@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/ping", "/bank/ping").permitAll()
+                .authorizeRequests().antMatchers("/ping").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(
                 "/v2/api-docs",
@@ -74,8 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers(
                 "/transaction-story",
-                "/*/pay",
-                "/pay-success",
+                "/transactions/*/pay",
+                "/transactions/*/pay-success",
                 "/success-operation",
                 "/failure-operation").hasAuthority("ROLE_CUSTOMER")
                 .and()

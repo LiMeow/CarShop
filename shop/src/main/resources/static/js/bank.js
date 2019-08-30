@@ -1,4 +1,4 @@
- import * as urls from '/js/urls.js';
+ import * as urls from '/carshop/js/urls.js';
 
  var formEl = document.getElementById('form');
 
@@ -15,6 +15,7 @@
     var cvv = document.getElementById('cvv').value;
     var cardHolderName = document.getElementById('cardHolderName').value;
     var money = document.getElementById('money').value;
+    var transactionId = document.getElementById('transactionId').value;
 
     formData.append('json', JSON.stringify({
     cardNumber: 'cardNumber',
@@ -38,7 +39,7 @@
         return response.json();
       })
      .then(function(jsonData) {
-        location.href = urls.BANK_SUCCESS_OPERATION;
+        location.href = urls.BANK_SUCCESS_OPERATION.replace('{transactionId}',transactionId);
      })
      .catch(function (error) {
         location.href = urls.BANK_FAILURE_OPERATION;

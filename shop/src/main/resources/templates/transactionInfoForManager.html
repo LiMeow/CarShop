@@ -63,24 +63,32 @@
             </td>
         </tr>
     </table>
-    <div class="btn-group btn-block justify-content-center">
-
-        <div th:if="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED' }">
-            <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">To next stage</a>
-            <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">Rejected</a>
+    <div class="row">
+        <div class="col-3">
         </div>
+        <div class="col-5">
+            <div class="btn-group btn-block justify-content-center pr-4">
 
-        <div th:unless="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED'}">
-            <a th:href="@{'/transaction-story/{id}/add-status' (id=${transactionId})}"
-               class="btn btn-lg sign-btn  mt-4" href="#">To next stage</a>
-            <a th:href="@{'/transaction-story/{id}/reject' (id=${transactionId})}"
-               class="btn btn-lg btn-danger mt-4" href="#">Rejected</a>
+                <div th:if="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED' }">
+                    <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">To next stage</a>
+                    <a class="btn btn-lg btn-secondary mt-4 disabled" href="#">Rejected</a>
+                </div>
+
+                <div th:unless="${statuses[statuses.size()-1].status.name() == 'REJECTED' || statuses[statuses.size()-1].status.name() == 'COMPLETED'}">
+                    <a th:href="@{'/transaction-story/{id}/add-status' (id=${transactionId})}"
+                       class="btn btn-lg sign-btn  mt-4" href="#">To next stage</a>
+                    <a th:href="@{'/transaction-story/{id}/reject' (id=${transactionId})}"
+                       class="btn btn-lg btn-danger mt-4" href="#">Rejected</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
         </div>
     </div>
 </div>
 
 
-<script src="/js/script.js"></script>
+<script src="/carshop/js/signOut.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
