@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Card Info</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+
+<header>
+    <div th:insert="~{navbar :: nav}"></div>
+</header>
+
+<label class="btn">
+    <a th:href="@{/cards/information}" class="btn btn-outline-light back-btn" href="#">
+        <img th:src="@{/img/backArrow.png}" width="25" height="25">
+        back
+    </a>
+</label>
+
+<div class="container">
+    <div class="form-auth col-sm-6 col-md-6 col-lg-3">
+
+        <div class="text-center">
+            <img th:src="@{/img/info.png}" width="80">
+            <h2>Card info</h2>
+        </div>
+
+        <div class="card py-3 px-3 mt-5">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="cardNumber">Card Number</label>
+                    <div id="cardNumber" class="form-control" th:text="${card.cardNumber}"></div>
+                </div>
+                <div class="form-group col-sm-4 col-md-3 col-lg-4">
+                    <label for="expiryDate">Expired date</label>
+                    <div id="expiryDate" class="form-control" th:text="${card.expiryDate}"></div>
+                </div>
+                <div class="form-group col-sm-4 col-md-3 col-lg-4 mr-3">
+                    <label for="cvv">CVC/CVV</label>
+                    <div id="cvv" class="form-control" th:text="${card.cvv}"></div>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                    <img th:src="@{/img/masterCard.png}" class="img-rounded">
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="cardHolderName">Card Holder Name</label>
+                    <div id="cardHolderName" class="form-control" th:text="${card.cardHolderName}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mt-4 px-3">
+            <label for="balance" class="col-sm-2 col-form-label">Balance: </label>
+            <div class="col-sm-10">
+                <div class="form-control" id="balance" th:text="${card.balance}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/bank/js/signOut.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

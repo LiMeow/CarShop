@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CarShop</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<div class=" container">
+    <form method="POST" action="" id="form"
+          class="form-auth col-sm-6 col-md-6 col-lg-3 card py-3 needs-validation">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" name="cardNumber" id="cardNumber" class="form-control"
+                       placeholder="0123 4567 8901 2345" required>
+            </div>
+            <div class="form-group col-sm-4 col-md-3 col-lg-4">
+                <label for="expiryDate">Expired date</label>
+                <input type="text" name="expiryDate" id="expiryDate" class="form-control" placeholder="DD/YYYY"
+                       required>
+            </div>
+            <div class="form-group col-sm-4 col-md-3 col-lg-4 mr-3">
+                <label for="cvv">CVC/CVV</label>
+                <input type="text" name="cvv" id="cvv" class="form-control" placeholder="***" required>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3">
+                <img th:src="@{/img/UI/card.png}" class="img-rounded">
+            </div>
+            <div class="form-group col-md-12">
+                <label for="cardHolderName">Card Holder Name</label>
+                <input type="text" name="cardHolderName" id="cardHolderName" class="form-control"
+                       placeholder="FIRSTNAME LASTNAME" required>
+            </div>
+            <input type="text" name="money" id="money" class="sr-only" data-th-value="${price}">
+            <input type="text" name="transactionId" id="transactionId" class="sr-only" data-th-value="${transactionId}">
+        </div>
+        <div class=" text-center">
+            <a th:href="@{/transaction-story}" class="btn btn-lg btn-danger" href="#">Cancel</a>
+            <button class="btn btn-lg sign-btn" type="submit">Pay now</button>
+        </div>
+    </form>
+</div>
+
+<script src="/carshop/js/bank.js" type="module"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

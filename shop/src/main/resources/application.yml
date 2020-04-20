@@ -1,0 +1,4 @@
+jwt:
+  signingKey: 'Hz5AqKSzpwW5LQIpI07VjPuNTImkzcx4lTrq3A8gwbe3AsPvO2mk0J1lsw7amgoJWY6Xxq3DOEYSoqMd'
+  aTokenDuration: 30
+  aLongTokenDuration: 1440
